@@ -1,82 +1,151 @@
 <!DOCTYPE html>
 <html>
   <head>
-  <title>bitstamp-js</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>bitstamp-js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <script src="scripts/jssha256.js" type="text/javascript"></script>
-  <script src="scripts/jquery-2.0.3.min.js" type="text/javascript"></script>
-  <script src="scripts/bitstamp-js.js" type="text/javascript"></script>
-  <script src="scripts/bitstamptrader.js" type="text/javascript"></script>
-  <!--<script src="tests.js" type="text/javascript"></script>-->
-  <link href="styles/normalize.css" rel="stylesheet" type="text/css" />
-  <link href="styles/font-awesome.css" rel="stylesheet" type="text/css" />
-  <!--<link href="styles/style.css" rel="stylesheet" type="text/css" />-->
-  <link href="styles/styles.css" rel="stylesheet" type="text/css" />
+    <!-- These are all styles. Customize to your liking -->
+    <link href="styles/normalize.css" rel="stylesheet" type="text/css" />
+    <link href="styles/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="styles/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
+    <link href="styles/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link href="styles/styles.css" rel="stylesheet" type="text/css" />
+
+    <!-- Libraries and helper scripts -->
+    <script src="scripts/jssha256.js" type="text/javascript"></script>
+    <script src="scripts/jquery-2.0.3.min.js" type="text/javascript"></script>
+    <script src="scripts/bitstamp-js.js" type="text/javascript"></script>
+    <script src="scripts/bitstamptrader.js" type="text/javascript"></script>
+    <script src="scripts/bootstrap.min.js" type="text/javascript"></script>
   </head>
   <body>
     <div class="container">
-      <div id="publicPanel">
-        Last price: <span id="tickerLast"></span> (Refreshing every <span id="refreshsecs">?</span> seconds)
-        <!--<button id="orderbook" type="button">Order Book</button>-->
+
+      <div id="panel_public">
+        <img src="images/bitstamp_logo.png" alt="Bitstamp logo">
+        <table class="table table-condensed">
+          <caption>(Refreshing every <span id="refreshsecs">?</span> seconds)</caption>
+          <tbody>
+            <tr>
+              <th>Last</th>
+              <th>High</th>
+              <th>Low</th>
+              <th>Volume</th>
+              <!--<th>Bid</th>
+              <th>Ask</th>-->
+            </tr>
+            <tr>
+              <td><span id="ticker_last"></span></td>
+              <td><span id="ticker_high"></span> </td>
+              <td><span id="ticker_low"></span></td>
+              <td><span id="ticker_volume"></span></td>
+              <!--<td><span id="ticker_bid"></span></td>
+              <td><span id="ticker_ask"></span></td>-->
+            </tr>
+          </tbody>
+        </table>
+        <!--<button id="toggle_orderbook" type="button">Show order book</button>-->
         <!--<button id="transactions" type="button">Transactions</button>-->
         <!--<button id="eurusd" type="button">EUR/USD Conversion Rate</button>-->
       </div>
+
+
     
-      <div id="loginPanel">
-        <input type="text" id="clientid" placeholder="Bitstamp Client ID" />
-        <input type="text" id="apikey" placeholder="API Key" />
-        <input type="password" id="apisecret" placeholder="API Secret" />
-        <button id="loginSubmit">Login</button>
+      <div id="panel_login">
+        <form role="form">
+          <div class="form-group">
+            <label for="clientid">Client ID</label>
+            <input type="text" id="clientid" class="form-control" placeholder="Client ID">
+          </div>
+          <div class="form-group">
+            <label for="apikey">API Key</label>
+            <input type="text" id="apikey" class="form-control" placeholder="API Key">
+          </div>
+          <div class="form-group">
+            <label for="apisecret">API Secret</label>
+            <input type="password" id="apisecret" class="form-control" placeholder="API Secret">
+          </div>
+        </form>
+
+        <button id="submit_login" class="btn btn-default btn-sm form-control">Login</button>
         <p id="loginmessage"></p>
       </div>
 
 
 
-      <div id="tradePanel">
-        <h1>Client ID: <span id="client_id"></span> / Fee: <span id="user_fee"></span></h1>
-        <div>Balance: <span id="balance_btc"></span> BTC (<span id="available_btc"></span> available/<span id="reserved_btc"></span> reserved)<br />
-        <span id="balance_usd"></span> USD (<span id="available_usd"></span> available/<span id="reserved_usd"></span> reserved)</div>
+      <div id="panel_trade">
+        <table class="table table-hover table-condensed">
+          <tbody>
+            <tr>
+              <th>Client ID:</th>
+              <td><strong><span id="client_id"></span></strong></td>
+            </tr>
+            <tr>
+              <th>Fee:</th>
+              <td><span id="user_fee"></span></td>
+            </tr>
+            <tr>
+              <th>BTC Balance:</th>
+              <td><span id="balance_btc"></span> (<span id="available_btc"></span> available/<span id="reserved_btc"></span> reserved)</td>
+            </tr>
+            <tr>
+              <th>USD Balance:</th>
+              <td><span id="balance_usd"></span> (<span id="available_usd"></span> available/<span id="reserved_usd"></span> reserved)</td>
+            </tr>
+          </tbody>
+        </table>
 
-        <div id="orderPanel">
-          <label for="trade_price">Price:</label><input id="trade_price" type="text">
-          <label for="trade_amount">Amount:</label><input id="trade_amount" type="text">
-          <button id="orderbuy" type="button">Buy</button>
-          <button id="ordersell" type="button">Sell</button>
+        <button id="toggle_order_panel" type="button" class="btn btn-sm">Toggle orders</button>
+        <div id="order_panel">
+          <div class="form-group">
+            <label for="trade_price">Price:</label>
+              <input id="trade_price" type="number">
+          </div>
+          <div class="form-group">
+            <label for="trade_amount">Amount:</label>
+            <input id="trade_amount" type="number">
+          </div>
+          <div class="form-group">
+            <button id="orderbuy" type="button" class="btn btn-success btn-sm">Buy</button>
+            <button id="ordersell" type="button" class="btn btn-danger btn-sm">Sell</button>
+          </div>
 
-          <div id="openordersPanel">
-            <button id="openorders" type="button">Refresh open orders</button>
-            <button id="cancelorder" type="button">Cancel selected order</button>
-            <select id="user_openorders" multiple>
+          <div id="openordersPanel" class="form-group">
+            <button id="openorders" type="button" class="btn btn-default btn-sm">Refresh open orders</button>
+            <button id="cancelorder" type="button" class="btn btn-default btn-sm">Cancel selected order</button>
+            <select id="user_openorders" class="form-control" multiple>
               <option value="">No open orders</option>
             </select>
           </div>
         </div>
 
-        <div id="transferPanel">
-          <input id="transferamount" type="text" /> <label for="transferamount">BTC</label>
-          <button id="btcdeposit" type="button">Deposit</button>
-          <button id="btcwithdrawal" type="button">Withdrawal</button>
+        <button id="toggle_transfer_panel" type="button" class="btn btn-sm">Toggle transfers</button>
+        <div id="transfers_panel">
+          <input id="transferamount" type="number" /> <label for="transferamount">BTC</label>
+          <button id="btcdeposit" type="button" class="btn btn-default btn-sm">Deposit</button>
+          <button id="btcwithdrawal" type="button" class="btn btn-default btn-sm">Withdrawal</button>
 
-          <div id="trasnferhistory">
-            <button id="withdrawalrequests" type="button">Show withdrawal requests</button>
-            <button id="unconfirmedbtc" type="button">Show confirmed bitcoin deposits</button>
-          </div>
+          <!--<div id="transferhistory">
+            <button id="withdrawalrequests" type="button" class="btn btn-default">Show withdrawal requests</button>
+            <button id="unconfirmedbtc" type="button" class="btn btn-default">Show confirmed bitcoin deposits</button>
+          </div>-->
         </div>
 
-        <button id="showusertransactions" type="button">Show transaction history</button>
+        <button id="showusertransactions" type="button" class="btn btn-default btn-sm">Show transaction history</button>
         <select id="usertransactionlist" multiple>
           <option>No user transactions</option>
         </select>
-        <button id="logout" type="logout">Logout</button>
+        <button id="logout" type="logout" class="btn btn-default btn-sm">Logout</button>
       </div>
     </div>
 
     <script type="text/javascript">
     $(document).ready(function() {
-      $('#loginPanel').show();
-      $('#tradePanel').hide();
+      $('#panel_login').show();
+      $('#panel_trade').hide();
       $('#usertransactionlist').hide();
+      $('#order_panel').hide();
+      $('#transfers_panel').hide();
 
       getTicker();
       checkLogin();
@@ -87,7 +156,7 @@
           //refreshTransactions();
         }, refreshsecs * 1000);
 
-      $('#loginSubmit').click( function(){doLogin($('#clientid').val(), $('#apikey').val(), $('#apisecret').val());} );
+      $('#submit_login').click( function(){doLogin($('#clientid').val(), $('#apikey').val(), $('#apisecret').val());} );
       $('#logout').click( doLogout );
       //$('#orderbook').click( function(){getOrderBook(1);} );
       //$('#transactions').click( function(){getTransactions('hour');} );
@@ -105,6 +174,8 @@
 
       $('#btcdeposit').click( getBitcoinDepositAddress );
       //$('#unconfirmedbtc').click( function(){listUnconfirmedBitcoinTransactions();} );
+      $('#toggle_order_panel').click( function(){toggleobj($('#order_panel'));} );
+      $('#toggle_transfers_panel').click( function(){toggleobj($('#order_panel'));} );
 
     });
     </script>

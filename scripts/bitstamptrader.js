@@ -43,6 +43,14 @@ function getBitcoinDepositAddress() {
   });
 }
 
+function toggleobj(obj) {
+  if (obj.is(':visible')) {
+    obj.hide();
+  } else {
+    obj.show();
+  }
+}
+
 function refreshUserTransactions() {
   if ($('#usertransactionlist').is(':visible')) {
     $('#usertransactionlist').hide();
@@ -158,13 +166,13 @@ function doLogin(clientid, apikey, apisecret) {
       $('#reserved_usd').text(response.data.usd_reserved.toString());
 
 
-      $('#loginPanel').hide();
-      $('#tradePanel').show();
-      refreshOpenOrders();
+      $('#panel_login').hide();
+      $('#panel_trade').show();
+      //refreshOpenOrders();
     } else {
       alert(response.error || 'Unknown error');
-      $('#loginPanel').show();
-      $('#tradePanel').hide();
+      $('#panel_login').show();
+      $('#panel_trade').hide();
     }
   });
 }
@@ -200,7 +208,12 @@ function checkLogin() {
 function getTicker(response) {
   params = bitstamp.submitRequest(bitstamp.methods.ticker, function(response){
     if ('data' in response) {
-      $('#tickerLast').text(response.data.last.toString());
+      $('#ticker_last').text(response.data.last.toString());
+      $('#ticker_high').text(response.data.high.toString());
+      $('#ticker_low').text(response.data.low.toString());
+      $('#ticker_volume').text(response.data.volume.toString());
+      $('#ticker_bid').text(response.data.bid.toString());
+      $('#ticker_ask').text(response.data.ask.toString());
     } else {
       alert(response.error || 'Unknown error');
     }
