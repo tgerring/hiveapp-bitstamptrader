@@ -1,0 +1,9 @@
+{
+  "name": "BitstampTrader",
+  "id": "bitstamptrader",
+  "version": "0.1",
+  "author": "Taylor Gerring",
+  "description": "Hive Bitstamp Trading appt",
+  "icon": "Icon.png",
+  "accessedHosts": ["www.bitstamp.net"]
+}

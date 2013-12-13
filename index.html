@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>bitstamp-js</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script src="scripts/jssha256.js" type="text/javascript"></script>
+  <script src="scripts/jquery-2.0.3.min.js" type="text/javascript"></script>
+  <script src="scripts/bitstamp-js.js" type="text/javascript"></script>
+  <script src="scripts/bitstamptrader.js" type="text/javascript"></script>
+  <!--<script src="tests.js" type="text/javascript"></script>-->
+  <link href="styles/normalize.css" rel="stylesheet" type="text/css" />
+  <link href="styles/font-awesome.css" rel="stylesheet" type="text/css" />
+  <!--<link href="styles/style.css" rel="stylesheet" type="text/css" />-->
+  <link href="styles/styles.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div class="container">
+      <div id="publicPanel">
+        Last price: <span id="tickerLast"></span> (Refreshing every <span id="refreshsecs">?</span> seconds)
+        <!--<button id="orderbook" type="button">Order Book</button>-->
+        <!--<button id="transactions" type="button">Transactions</button>-->
+        <!--<button id="eurusd" type="button">EUR/USD Conversion Rate</button>-->
+      </div>
+    
+      <div id="loginPanel">
+        <input type="text" id="clientid" placeholder="Bitstamp Client ID" />
+        <input type="text" id="apikey" placeholder="API Key" />
+        <input type="password" id="apisecret" placeholder="API Secret" />
+        <button id="loginSubmit">Login</button>
+        <p id="loginmessage"></p>
+      </div>
+
+
+
+      <div id="tradePanel">
+        <h1>Client ID: <span id="client_id"></span> / Fee: <span id="user_fee"></span></h1>
+        <div>Balance: <span id="balance_btc"></span> BTC (<span id="available_btc"></span> available/<span id="reserved_btc"></span> reserved)<br />
+        <span id="balance_usd"></span> USD (<span id="available_usd"></span> available/<span id="reserved_usd"></span> reserved)</div>
+
+        <div id="orderPanel">
+          <label for="trade_price">Price:</label><input id="trade_price" type="text">
+          <label for="trade_amount">Amount:</label><input id="trade_amount" type="text">
+          <button id="orderbuy" type="button">Buy</button>
+          <button id="ordersell" type="button">Sell</button>
+
+          <div id="openordersPanel">
+            <button id="openorders" type="button">Refresh open orders</button>
+            <button id="cancelorder" type="button">Cancel selected order</button>
+            <select id="user_openorders" multiple>
+              <option value="">No open orders</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="transferPanel">
+          <input id="transferamount" type="text" /> <label for="transferamount">BTC</label>
+          <button id="btcdeposit" type="button">Deposit</button>
+          <button id="btcwithdrawal" type="button">Withdrawal</button>
+
+          <div id="trasnferhistory">
+            <button id="withdrawalrequests" type="button">Show withdrawal requests</button>
+            <button id="unconfirmedbtc" type="button">Show confirmed bitcoin deposits</button>
+          </div>
+        </div>
+
+        <button id="showusertransactions" type="button">Show transaction history</button>
+        <select id="usertransactionlist" multiple>
+          <option>No user transactions</option>
+        </select>
+        <button id="logout" type="logout">Logout</button>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+      $('#loginPanel').show();
+      $('#tradePanel').hide();
+      $('#usertransactionlist').hide();
+
+      getTicker();
+      checkLogin();
+      $('#refreshsecs').text(refreshsecs.toString());
+      window.setInterval(function(){
+          getTicker();
+          //refreshOrderBook();
+          //refreshTransactions();
+        }, refreshsecs * 1000);
+
+      $('#loginSubmit').click( function(){doLogin($('#clientid').val(), $('#apikey').val(), $('#apisecret').val());} );
+      $('#logout').click( doLogout );
+      //$('#orderbook').click( function(){getOrderBook(1);} );
+      //$('#transactions').click( function(){getTransactions('hour');} );
+      //$('#eurusd').click( function(){getEurUsdRate();} );
+
+      //$('#balance').click( getBalance );
+      $('#showusertransactions').click( refreshUserTransactions );
+      $('#openorders').click( refreshOpenOrders );
+      $('#cancelorder').click( cancelOrders );
+      $('#orderbuy').click( function(){orderBuy($('#trade_amount').val(), $('#trade_price').val());} );
+      $('#ordersell').click( function(){orderSell($('#trade_amount').val(), $('#trade_price').val());} );
+
+      //$('#withdrawalrequests').click( function(){withdrawalRequest();} );
+      $('#btcwithdrawal').click( function(){bitcoinWithdrawl($('#transferamount').val());} );
+
+      $('#btcdeposit').click( getBitcoinDepositAddress );
+      //$('#unconfirmedbtc').click( function(){listUnconfirmedBitcoinTransactions();} );
+
+    });
+    </script>
+  </body>
+</html>

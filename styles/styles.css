@@ -1,0 +1,23 @@
+body {
+  background: #F7F6F2;
+  color: #333;
+}
+
+input[type="text"], input[type="password"] {
+  width: 20ex;
+}
+
+select[multiple] {
+	display: block;
+  width: 40ex;
+  height: 8em;
+}
+
+textarea {
+	width: 40ex;
+	display: block;
+}
+
+.container {
+	padding: 1em;
+}
