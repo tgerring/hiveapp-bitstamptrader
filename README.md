@@ -1,6 +1,6 @@
 # hiveapp-bitstamptrader
 
-![Login Screen](tgerring.github.com/hiveapp-bitstamptrader/ss1.png)
+![Login Screen](http://i.imgur.com/CohMvII.png)
 
 ## Usage
 ```
