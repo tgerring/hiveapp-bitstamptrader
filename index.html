@@ -21,6 +21,7 @@
   <body>
     <div class="container">
       <img src="images/bitstamp_logo.png" alt="Bitstamp logo">
+
       <div id="panel_public">
         <table class="table table-condensed">
           <caption>(Refreshing every <span id="refreshsecs">?</span> seconds)</caption>
@@ -47,12 +48,10 @@
         <!--<button id="toggle_orderbook" type="button">Show order book</button>-->
         <!--<button id="transactions" type="button">Transactions</button>-->
         <!--<button id="eurusd" type="button">EUR/USD Conversion Rate</button>-->
-      </div>
-
-
-    
+      </div> <!-- /panel_public -->
+ 
       <div id="panel_login">
-        <form role="form">
+        <form id="login_form" role="form">
           <div class="form-group">
             <label for="clientid">Client ID</label>
             <input type="text" id="clientid" class="form-control" placeholder="Client ID">
@@ -65,13 +64,11 @@
             <label for="apisecret">API Secret</label>
             <input type="password" id="apisecret" class="form-control" placeholder="API Secret">
           </div>
+          <button id="submit_login" type="button" class="btn btn-default btn-sm form-control"><i class="fa fa-sign-in"></i> Login</button>
         </form>
 
-        <button id="submit_login" class="btn btn-default btn-sm form-control"><i class="fa fa-sign-in"></i> Login</button>
-        <p id="loginmessage"></p>
-      </div>
-
-
+        <p id="loginmessage" class="display: none;"><i class="fa fa-spinner fa-spin"></i> Credentials found. Now logging in&hellip;</p>
+      </div> <!-- /panel_login -->
 
       <div id="panel_trade">
         <table class="table table-condensed">
@@ -108,7 +105,7 @@
             <form class="form-horizontal" role="form">
               <div class="form-group">
                 <label for="trade_price" class="col-xs-4 control-label">Price:</label>
-                <div class="col-xs-8"><input id="trade_price" class="form-control" type="number" min="0" step="0.0001" placeholder="Market Order"></div>
+                <div class="col-xs-8"><input id="trade_price" class="form-control" type="number" min="0" step="0.0001" placeholder="(market order)"></div>
               </div>
               <div class="form-group">
                 <label for="trade_amount" class="col-xs-4 control-label">Amount:</label>
@@ -128,24 +125,31 @@
 
           <div class="tab-pane fade in active" id="transfers">
 
-            <div class="input-group col-xs-12">
-              <span class="input-group-addon"><i class="fa fa-btc"></i></span>
-              <input id="transferamount" type="number" class="form-control" placeholder="# of bitcoins">
-            </div>
-
             <p id="transfers_message"></p>
 
-            <div class="col-xs-6">
-              <button id="btcdeposit" type="button" class="btn btn-default btn-sm form-control"><i class="fa fa-download"></i> Deposit</button>
-            </div>
-            <div class="col-xs-6">
-              <button id="btcwithdrawal" type="button" class="btn btn-default btn-sm form-control"><i class="fa fa-upload"></i> Withdrawal</button>
-            </div>
+            <form role="form">
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-btc"></i></span>
+                <input id="transferamount" type="number" class="form-control" placeholder="# of bitcoins">
+              </div>
+              <div class="row">
+                <div class="col-xs-6">
+                  <button id="btcdeposit" type="button" class="btn btn-default btn-sm form-control"><i class="fa fa-download"></i> Deposit</button>
+                </div>
 
-            <!--<div id="transferhistory">
-              <button id="withdrawalrequests" type="button" class="btn btn-default">Show withdrawal requests</button>
-              <button id="unconfirmedbtc" type="button" class="btn btn-default">Show confirmed bitcoin deposits</button>
-            </div>-->
+                <div class="col-xs-6">
+                  <button id="btcwithdrawal" type="button" class="btn btn-default btn-sm form-control"><i class="fa fa-upload"></i> Withdrawal</button>
+                </div>
+              </div>
+            </form>
+
+            <select id="pending_withdrawal_requests" class="form-control" multiple size="4">
+              <option>XXXNo pending withdrawal requests</option>
+            </select>
+
+            <select id="unconfirmed_bitcoin_deposits" class="form-control" multiple size="4">
+              <option>XXXNo unconfirmed bitcoin deposits</option>
+            </select>
 
           </div>
 
@@ -155,8 +159,7 @@
             </select>
           </div>
         </div>
-
-      </div>
+      </div> <!-- /panel_trade -->
     </div>
 
     <script type="text/javascript">
@@ -183,11 +186,6 @@
 
       $('#btcwithdrawal').click( function(){bitcoinWithdrawl($('#transferamount').val());} );
       $('#btcdeposit').click( getBitcoinDepositAddress );
-      //$('#unconfirmedbtc').click( function(){listUnconfirmedBitcoinTransactions();} );
-      //$('#withdrawalrequests').click( function(){withdrawalRequest();} );
-
-      $('#showusertransactions').click( refreshUserTransactions );
-
     });
     </script>
   </body>

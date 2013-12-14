@@ -1,7 +1,78 @@
 var bitstamp = new Bitstamp();
 var refreshsecs = 15;
 
+function listUnconfirmedBitcoinTransactions() {
+  params = bitstamp.submitRequest(bitstamp.methods.unconfirmedbtc, function(response){
+    $('#unconfirmed_bitcoin_deposits option').each(function(index, option) {$(option).remove();});
+    if ('data' in response) {
+        // Build transactions
+        $.each(response.data, function(index, value) {
+          msg = value.amount + ' BTC has ' + value.confirmations + ' confirmations';
+          $('#unconfirmed_bitcoin_deposits').append('<option>' + msg + '</option>');
+        });
 
+        // Exception for empty transaction list
+        if ($('#unconfirmed_bitcoin_deposits option').size() < 1) {
+          $('#unconfirmed_bitcoin_deposits').append('<option>No unconfirmed bitcoin deposits</option>');
+        }
+    } else {
+      errormsg = response.error || 'Unknown error';
+      console.log(errormsg);
+      $('#unconfirmed_bitcoin_deposits').append('<option>Could not fetch transactions: ' + errormsg + '</option>');
+    }
+  });
+}
+
+
+function listPendingWithdrawalRequests() {
+  params = bitstamp.submitRequest(bitstamp.methods.withdrawalrequests, function(response){
+    $('#pending_withdrawal_requests option').each(function(index, option) {$(option).remove();});
+    if ('data' in response) {
+        // Build transactions
+        $.each(response.data, function(index, value) {
+          typedesc = 'Unknown';
+          if (value.type == 0) {
+            typedesc = 'SEPA';
+          } else if (value.type == 1) {
+            typedesc = 'bitcoin';
+          } else if (value.type == 2) {
+            typedesc = 'WIRE transfer';
+          } else if (value.type == 3) {
+            typedesc = 'bitstamp code';
+          } else if (value.type == 4) {
+            typedesc = 'bitstamp code';
+          } else if (value.type == 5) {
+            typedesc = 'Mt.Gox code';
+          }
+
+          statusdesc = 'unknown';
+          if (value.type == 0) {
+            statusdesc = 'open';
+          } else if (value.type == 1) {
+            statusdesc = 'in process';
+          } else if (value.type == 2) {
+            statusdesc = 'finished';
+          } else if (value.type == 3) {
+            statusdesc = 'canceled';
+          } else if (value.type == 4) {
+            statusdesc = 'failed';
+          }
+
+          msg = value.amount.toString() + ' via ' + typedesc + ' at ' + value.datetime + ' is ' + statusdesc;
+          $('#pending_withdrawal_requests').append('<option>' + msg + '</option>');
+        });
+
+        // Exception for empty transaction list
+        if ($('#pending_withdrawal_requests option').size() < 1) {
+          $('#pending_withdrawal_requests').append('<option>No pending withdrawal requests</option>');
+        }
+    } else {
+      errormsg = response.error || 'Unknown error';
+      console.log(errormsg);
+      $('#pending_withdrawal_requests').append('<option>Could not fetch transactions: ' + errormsg + '</option>');
+    }
+  });
+}
 
 function bitcoinWithdrawl(amount) {
   var user_address;
@@ -11,6 +82,7 @@ function bitcoinWithdrawl(amount) {
   params = bitstamp.submitRequest(bitstamp.methods.btcwithdrawal, function(response){
     if ('data' in response) {
       refreshUserTransactions();
+      listPendingWithdrawalRequests();
     } else {
       alert(response.error);
     }
@@ -39,7 +111,11 @@ function completeTrade(response) {
 function getBitcoinDepositAddress() {
   params = bitstamp.submitRequest(bitstamp.methods.btcdepositaddress, function(response){
     if ('data' in response) {
-      bitcoin.sendMoney(response.data, $('#transferamount').val() * 1e8); // 1e8 converts satoshits to bitcoins
+      bitcoin.sendMoney(response.data, $('#transferamount').val() * 1e8, function(success, transactionId){
+        if (success === true) {
+          listUnconfirmedBitcoinTransactions(); // this is unlikely to show anything
+        }
+      });
     } else {
       var errormsg = response.error || 'Unknown error';
       $('#btcdeposit').prop('disabled', 'disabled');
@@ -55,8 +131,8 @@ function refreshUserTransactions() {
 
       if ('data' in response) {
         // Build transactions
-        typedesc = 'Other';
         $.each(response.data, function(index, value) {
+          typedesc = 'Other';
           if (value.type == 0) {
             typedesc = 'Deposit';
           } else if (value.type == 1) {
@@ -70,11 +146,11 @@ function refreshUserTransactions() {
 
         // Exception for empty transaction list
         if ($('#usertransactionlist option').size() < 1) {
-          $('#usertransactionlist').append('<option value>No transactions</option>');
+          $('#usertransactionlist').append('<option>No transactions</option>');
         }
       } else {
         errormsg = response.error || 'Unknown error';
-        $('#usertransactionlist').append('<option value>Could not fetch transactions: ' + errormsg + '</option>');
+        $('#usertransactionlist').append('<option>Could not fetch transactions: ' + errormsg + '</option>');
       }
     },
     {} // Could be used for pagination in the future
@@ -96,8 +172,8 @@ function refreshOpenOrders() {
     if ('data' in response) {
       $('#btn_cancelorder').prop('disabled', false);
       // Build transactions
-      typedesc = 'Other';
       $.each(response.data, function(index, value) {
+        typedesc = 'Other';
         if (value.type == 0) {
           typedesc = 'Buy ';
         } else if (value.type == 1) {
@@ -159,6 +235,8 @@ function doLogin(clientid, apikey, apisecret) {
       $('#panel_trade').show();
       refreshOpenOrders();
       refreshUserTransactions();
+      listPendingWithdrawalRequests();
+      listUnconfirmedBitcoinTransactions();
     } else {
       alert(response.error || 'Unknown error');
       $('#panel_login').show();
@@ -188,7 +266,8 @@ function checkLogin() {
 
   if (clientid && apikey && apisecret) {
     console.log('Found login details for ' + clientid);
-    $('#loginmessage').text('<i class="fa fa-spinner fa-spin"></i> Credentials found. Now logging in...');
+    $('#login_form').hide();
+    $('#loginmessage').show();
     doLogin(clientid, apikey, apisecret);
   } else {
     console.log('Did not find login details in cookie');

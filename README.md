@@ -1,6 +1,6 @@
 # hiveapp-bitstamptrader
 
-![Login Screen](http://i.imgur.com/CohMvII.png)
+![Bitstamp orders](http://i.imgur.com/QsZqZV6.png)
 
 ## Usage
 ```
@@ -13,5 +13,6 @@ This should get the latest repository and symlink it into Hive's app directory. 
 
 ## Issues
 * jssha256.js library is returning invalid data occasionally and needs to be swapped for Google JS Crypto
-* Trading not yet properly tested
-* Displaying lists of withdrawl requests and bitcoin despoits are not implemented
+* Numbers need to be formatted for output
+* Currency separator characters need to be handled properly
+* Application needs thorough testing
