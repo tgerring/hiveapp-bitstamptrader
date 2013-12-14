@@ -188,7 +188,7 @@ function checkLogin() {
 
   if (clientid && apikey && apisecret) {
     console.log('Found login details for ' + clientid);
-    $('#loginmessage').text('Credentials found. Now logging in...');
+    $('#loginmessage').text('<i class="fa fa-spinner fa-spin"></i> Credentials found. Now logging in...');
     doLogin(clientid, apikey, apisecret);
   } else {
     console.log('Did not find login details in cookie');

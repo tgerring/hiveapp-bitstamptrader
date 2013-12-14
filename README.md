@@ -13,6 +13,5 @@ This should get the latest repository and symlink it into Hive's app directory. 
 
 ## Issues
 * jssha256.js library is returning invalid data occasionally and needs to be swapped for Google JS Crypto
-* Looks ugly
-* Withdrawl requests and confirmed bitcoin despoits are not implemented
-* Trading not properly tested
+* Trading not yet properly tested
+* Displaying lists of withdrawl requests and bitcoin despoits are not implemented
