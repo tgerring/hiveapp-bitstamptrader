@@ -8,7 +8,7 @@
     <link href="styles/normalize.css" rel="stylesheet" type="text/css" />
     <link href="styles/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="styles/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
-    <link href="styles/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link href="styles/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="styles/styles.css" rel="stylesheet" type="text/css" />
 
     <!-- Libraries and helper scripts -->
@@ -96,14 +96,15 @@
         </table>
 
         <ul class="nav nav-tabs">
-          <li id="tab_orders" class="active"><a href="#orders" data-toggle="tab">Orders</a></li>
-          <li id="tab_transfers"><a href="#transfers" data-toggle="tab">Transfers</a></li>
+          <li id="tab_orders"><a href="#orders" data-toggle="tab">Orders</a></li>
+          <li id="tab_transfers" class="active"><a href="#transfers" data-toggle="tab">Transfers</a></li>
           <li id="tab_transactions"><a href="#transactions" data-toggle="tab">Transactions</a></li>
         </ul>
 
 
         <div class="tab-content">
-          <div class="tab-pane fade in active" id="orders">
+
+          <div class="tab-pane fade" id="orders">
             <form class="form-horizontal" role="form">
               <div class="form-group">
                 <label for="trade_price" class="col-xs-4 control-label">Price:</label>
@@ -118,26 +119,38 @@
                 <div class="col-xs-6"><button id="ordersell" type="button" class="form-control btn btn-danger btn-sm">Sell</button></div>
               </div>
             </form>
-            <div id="openordersPanel" class="form-group">
-              <button id="openorders" type="button" class="btn btn-default btn-sm">Refresh open orders</button>
-              <button id="cancelorder" type="button" class="btn btn-default btn-sm">Cancel selected orders</button>
-              <select id="user_openorders" class="form-control" multiple>
-                <option value="">No open orders</option>
-              </select>
-            </div>
+
+            <select id="user_openorders" class="form-control" multiple size="8">
+              <option value="">No open orders</option>
+            </select>
+            <button id="btn_cancelorder" type="button" class="btn btn-default btn-sm form-control">Cancel selected orders</button>
           </div>
-          <div class="tab-pane fade" id="transfers">
-            <input id="transferamount" type="number" /> <label for="transferamount">BTC</label>
-            <button id="btcdeposit" type="button" class="btn btn-default btn-sm">Deposit</button>
-            <button id="btcwithdrawal" type="button" class="btn btn-default btn-sm">Withdrawal</button>
+
+          <div class="tab-pane fade in active" id="transfers">
+
+            <div class="input-group col-xs-12">
+              <span class="input-group-addon"><i class="fa fa-btc"></i></span>
+              <input id="transferamount" type="number" class="form-control" placeholder="# of bitcoins">
+            </div>
+
+            <p id="transfers_message"></p>
+
+            <div class="col-xs-6">
+              <button id="btcdeposit" type="button" class="btn btn-default btn-sm form-control">Deposit</button>
+            </div>
+            <div class="col-xs-6">
+              <button id="btcwithdrawal" type="button" class="btn btn-default btn-sm form-control">Withdrawal</button>
+            </div>
 
             <!--<div id="transferhistory">
               <button id="withdrawalrequests" type="button" class="btn btn-default">Show withdrawal requests</button>
               <button id="unconfirmedbtc" type="button" class="btn btn-default">Show confirmed bitcoin deposits</button>
             </div>-->
+
           </div>
+
           <div class="tab-pane fade" id="transactions">
-            <select id="usertransactionlist" class="form-control" multiple>
+            <select id="usertransactionlist" class="form-control" multiple size="8">
               <option>No user transactions</option>
             </select>
           </div>
@@ -150,36 +163,30 @@
     $(document).ready(function() {
       $('#panel_login').show();
       $('#panel_trade').hide();
-
-      getTicker();
-      checkLogin();
       $('#refreshsecs').text(refreshsecs.toString());
+
+      checkLogin();
+      getTicker();
       window.setInterval(function(){
-          getTicker();
-          //refreshOrderBook();
-          //refreshTransactions();
-        }, refreshsecs * 1000);
+        getTicker();
+      }, refreshsecs * 1000);
 
       $('#submit_login').click( function(){doLogin($('#clientid').val(), $('#apikey').val(), $('#apisecret').val());} );
       $('#button_logout').click( doLogout );
+
+      $('#orderbuy').click( function(){orderBuy($('#trade_amount').val(), $('#trade_price').val());} );
+      $('#ordersell').click( function(){orderSell($('#trade_amount').val(), $('#trade_price').val());} );
+      $('#btn_cancelorder').click( cancelOrders );
       //$('#orderbook').click( function(){getOrderBook(1);} );
       //$('#transactions').click( function(){getTransactions('hour');} );
       //$('#eurusd').click( function(){getEurUsdRate();} );
 
-      //$('#balance').click( getBalance );
-      $('#showusertransactions').click( refreshUserTransactions );
-      $('#openorders').click( refreshOpenOrders );
-      $('#cancelorder').click( cancelOrders );
-      $('#orderbuy').click( function(){orderBuy($('#trade_amount').val(), $('#trade_price').val());} );
-      $('#ordersell').click( function(){orderSell($('#trade_amount').val(), $('#trade_price').val());} );
-
-      //$('#withdrawalrequests').click( function(){withdrawalRequest();} );
       $('#btcwithdrawal').click( function(){bitcoinWithdrawl($('#transferamount').val());} );
-
       $('#btcdeposit').click( getBitcoinDepositAddress );
       //$('#unconfirmedbtc').click( function(){listUnconfirmedBitcoinTransactions();} );
-      $('#toggle_order_panel').click( function(){toggleobj($('#order_panel'));} );
-      $('#toggle_transfers_panel').click( function(){toggleobj($('#transfers_panel'));} );
+      //$('#withdrawalrequests').click( function(){withdrawalRequest();} );
+
+      $('#showusertransactions').click( refreshUserTransactions );
 
     });
     </script>

@@ -9,8 +9,10 @@ function bitcoinWithdrawl(amount) {
     user_address = info.address;
   });
   params = bitstamp.submitRequest(bitstamp.methods.btcwithdrawal, function(response){
-    if ('error' in response) {
-      alert(response.error)
+    if ('data' in response) {
+      refreshUserTransactions();
+    } else {
+      alert(response.error);
     }
   }, {'amount': amount, 'address': user_address});
 }
@@ -28,6 +30,7 @@ function completeTrade(response) {
     $('#trade_amount').val('');
     $('#trade_price').val('');
     refreshOpenOrders();
+    refreshUserTransactions();
   } else {
     alert(response.error || 'Unknown error');
   }
@@ -38,25 +41,19 @@ function getBitcoinDepositAddress() {
     if ('data' in response) {
       bitcoin.sendMoney(response.data, $('#transferamount').val() * 1e8); // 1e8 converts satoshits to bitcoins
     } else {
-      alert(response.error || 'Unknown error');
+      var errormsg = response.error || 'Unknown error';
+      $('#btcdeposit').prop('disabled', 'disabled');
+      $('#transfers_message').html('Deposit not enabled: ' + errormsg);
     }
   });
 }
 
-function toggleobj(obj) {
-  if (obj.is(':visible')) {
-    obj.hide();
-  } else {
-    obj.show();
-  }
-}
-
 function refreshUserTransactions() {
   bitstamp.submitRequest(bitstamp.methods.usertransactions, function(response){
-      if ('data' in response) {
-        // Clear transactions list
-        $('#usertransactionlist option').each(function(index, option) {$(option).remove();});
+      // Clear transactions list
+      $('#usertransactionlist option').each(function(index, option) {$(option).remove();});
 
+      if ('data' in response) {
         // Build transactions
         typedesc = 'Other';
         $.each(response.data, function(index, value) {
@@ -73,10 +70,11 @@ function refreshUserTransactions() {
 
         // Exception for empty transaction list
         if ($('#usertransactionlist option').size() < 1) {
-          $('#usertransactionlist').append('<option value>No user transactions</option>');
+          $('#usertransactionlist').append('<option value>No transactions</option>');
         }
       } else {
-        alert(response.error || 'Unknown error');
+        errormsg = response.error || 'Unknown error';
+        $('#usertransactionlist').append('<option value>Could not fetch transactions: ' + errormsg + '</option>');
       }
     },
     {} // Could be used for pagination in the future
@@ -92,11 +90,11 @@ function doLogout() {
 
 function refreshOpenOrders() {
   params = bitstamp.submitRequest(bitstamp.methods.openorders, function(response){
+    // Clear transactions list
+    $('#user_openorders option').each(function(index, option) {$(option).remove();});
+
     if ('data' in response) {
-
-      // Clear transactions list
-      $('#user_openorders option').each(function(index, option) {$(option).remove();});
-
+      $('#btn_cancelorder').prop('disabled', false);
       // Build transactions
       typedesc = 'Other';
       $.each(response.data, function(index, value) {
@@ -108,13 +106,16 @@ function refreshOpenOrders() {
         msg = typedesc + value.amount.toString() + ' at ' + value.price.toString();
         $('#user_openorders').append('<option>' + msg + '</option>');
       });
-      
+
       // Exception for empty transaction list
       if ($('#user_openorders option').size() < 1) {
         $('#user_openorders').append('<option value="">No open orders</option>');
+        $('#btn_cancelorder').prop('disabled', true);
       }
     } else {
-      alert(response.error || 'Unknown error');
+      errormsg = response.error || 'Unknown error';
+      $('#user_openorders').append('<option value="">Could not fetch orders: ' + errormsg + '</option>');
+      $('#btn_cancelorder').prop('disabled', true);
     }
   });
 }
