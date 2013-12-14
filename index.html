@@ -97,8 +97,7 @@
           <li id="tab_transfers" class="active"><a href="#transfers" data-toggle="tab">Transfers</a></li>
           <li id="tab_transactions"><a href="#transactions" data-toggle="tab">Transactions</a></li>
         </ul>
-
-
+        
         <div class="tab-content">
 
           <div class="tab-pane fade" id="orders">
@@ -144,11 +143,11 @@
             </form>
 
             <select id="pending_withdrawal_requests" class="form-control" multiple size="4">
-              <option>XXXNo pending withdrawal requests</option>
+              <option>No pending withdrawal requests</option>
             </select>
 
             <select id="unconfirmed_bitcoin_deposits" class="form-control" multiple size="4">
-              <option>XXXNo unconfirmed bitcoin deposits</option>
+              <option>No unconfirmed bitcoin deposits</option>
             </select>
 
           </div>
@@ -164,6 +163,8 @@
 
     <script type="text/javascript">
     $(document).ready(function() {
+
+      // Initialization 
       $('#panel_login').show();
       $('#panel_trade').hide();
       $('#refreshsecs').text(refreshsecs.toString());
@@ -173,19 +174,24 @@
       window.setInterval(function(){
         getTicker();
       }, refreshsecs * 1000);
+      /// Initialization
 
+      // Event bindings
       $('#submit_login').click( function(){doLogin($('#clientid').val(), $('#apikey').val(), $('#apisecret').val());} );
       $('#button_logout').click( doLogout );
-
       $('#orderbuy').click( function(){orderBuy($('#trade_amount').val(), $('#trade_price').val());} );
       $('#ordersell').click( function(){orderSell($('#trade_amount').val(), $('#trade_price').val());} );
       $('#btn_cancelorder').click( cancelOrders );
+      $('#btcwithdrawal').click( function(){bitcoinWithdrawl($('#transferamount').val());} );
+      $('#btcdeposit').click( getBitcoinDepositAddress );
+      /// Event bindings
+
+      // Unimplemented functionality
       //$('#orderbook').click( function(){getOrderBook(1);} );
       //$('#transactions').click( function(){getTransactions('hour');} );
       //$('#eurusd').click( function(){getEurUsdRate();} );
+      /// Unimplemented functionality
 
-      $('#btcwithdrawal').click( function(){bitcoinWithdrawl($('#transferamount').val());} );
-      $('#btcdeposit').click( getBitcoinDepositAddress );
     });
     </script>
   </body>

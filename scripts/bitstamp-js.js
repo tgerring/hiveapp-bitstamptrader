@@ -180,7 +180,5 @@ Bitstamp.prototype.parseResponse = function(response, callback) {
     returnval.data = response;
   }
 
-  console.log('Returning this object to callback:');
-  console.log(returnval);
   callback(returnval);
 }
