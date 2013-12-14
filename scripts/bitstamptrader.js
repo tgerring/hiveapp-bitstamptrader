@@ -1,5 +1,24 @@
 var bitstamp = new Bitstamp();
 var refreshsecs = 15;
+var systemInfo = {};
+
+
+function format_number( number, format ){  
+  //systemInfo.decimalSeparator = ',';
+
+  value = numeral(number);
+  result = value.format(format)
+  if (value.value() == 0) {
+    result = '0';
+  }
+
+  /*if (systemInfo.decimalSeparator === ',') {
+    result = result.replace('/[,]/g', ' ');
+    result = result.replace('/[.]/g', ',');
+  }*/
+
+  return result;
+}
 
 function listUnconfirmedBitcoinTransactions() {
   params = bitstamp.submitRequest(bitstamp.methods.unconfirmedbtc, function(response){
@@ -221,14 +240,15 @@ function doLogin(clientid, apikey, apisecret) {
       storeLoginDetails(bitstamp);
       
       $('#client_id').text(bitstamp.auth.client_id.toString());
-      $('#user_fee').text(response.data.fee.toString());
+      $('#user_fee').text(format_number(response.data.fee / 100, '0.00%'));
+      //$('#user_fee').text(response.data.fee.toString());
 
-      $('#balance_btc').text(response.data.btc_balance.toString());
-      $('#available_btc').text(response.data.btc_available.toString());
-      $('#reserved_btc').text(response.data.btc_reserved.toString());
-      $('#balance_usd').text(response.data.usd_balance.toString());
-      $('#available_usd').text(response.data.usd_available.toString());
-      $('#reserved_usd').text(response.data.usd_reserved.toString());
+      $('#balance_btc').text(format_number(response.data.btc_balance, '0,0.0000'));
+      $('#available_btc').text(format_number(response.data.btc_available, '0,0.0000'));
+      $('#reserved_btc').text(format_number(response.data.btc_reserved, '0,0.0000'));
+      $('#balance_usd').text(format_number(response.data.usd_balance, '$0,0.00'));
+      $('#available_usd').text(format_number(response.data.usd_available, '$0,0.00'));
+      $('#reserved_usd').text(format_number(response.data.usd_reserved, '$0,0.00'));
 
 
       $('#panel_login').hide();
@@ -277,12 +297,12 @@ function checkLogin() {
 function getTicker(response) {
   params = bitstamp.submitRequest(bitstamp.methods.ticker, function(response){
     if ('data' in response) {
-      $('#ticker_last').text(response.data.last.toString());
-      $('#ticker_high').text(response.data.high.toString());
-      $('#ticker_low').text(response.data.low.toString());
-      $('#ticker_volume').text(response.data.volume.toString());
-      $('#ticker_bid').text(response.data.bid.toString());
-      $('#ticker_ask').text(response.data.ask.toString());
+      $('#ticker_last').text(format_number(response.data.last, '$0,0.00'));
+      $('#ticker_high').text(format_number(response.data.high, '$0,0.00'));
+      $('#ticker_low').text(format_number(response.data.low, '$0,0.00'));
+      $('#ticker_volume').text(format_number(response.data.volume, '0,0.000000'));
+      $('#ticker_bid').text(format_number(response.data.bid, '$0,0.00'));
+      $('#ticker_ask').text(format_number(response.data.ask, '$0,0.00'));
     } else {
       alert(response.error || 'Unknown error');
     }
