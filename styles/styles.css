@@ -3,6 +3,14 @@ body {
   color: #333;
 }
 
+table caption {
+	font-size: 70%;
+}
+
+#button_logout {
+	margin-top: -4px;
+}
+
 /*
 body {
   background: #F7F6F2;8ec919

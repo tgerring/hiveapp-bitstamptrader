@@ -20,9 +20,8 @@
   </head>
   <body>
     <div class="container">
-
+      <img src="images/bitstamp_logo.png" alt="Bitstamp logo">
       <div id="panel_public">
-        <img src="images/bitstamp_logo.png" alt="Bitstamp logo">
         <table class="table table-condensed">
           <caption>(Refreshing every <span id="refreshsecs">?</span> seconds)</caption>
           <tbody>
@@ -44,6 +43,7 @@
             </tr>
           </tbody>
         </table>
+        
         <!--<button id="toggle_orderbook" type="button">Show order book</button>-->
         <!--<button id="transactions" type="button">Transactions</button>-->
         <!--<button id="eurusd" type="button">EUR/USD Conversion Rate</button>-->
@@ -74,11 +74,11 @@
 
 
       <div id="panel_trade">
-        <table class="table table-hover table-condensed">
+        <table class="table table-condensed">
           <tbody>
             <tr>
               <th>Client ID:</th>
-              <td><strong><span id="client_id"></span></strong></td>
+              <th><span id="client_id"></span> <button id="button_logout" type="button" class="btn btn-default btn-xs">Logout</a></th>
             </tr>
             <tr>
               <th>Fee:</th>
@@ -97,22 +97,25 @@
 
         <button id="toggle_order_panel" type="button" class="btn btn-sm">Toggle orders</button>
         <div id="order_panel">
-          <div class="form-group">
-            <label for="trade_price">Price:</label>
-              <input id="trade_price" type="number">
-          </div>
-          <div class="form-group">
-            <label for="trade_amount">Amount:</label>
-            <input id="trade_amount" type="number">
-          </div>
-          <div class="form-group">
-            <button id="orderbuy" type="button" class="btn btn-success btn-sm">Buy</button>
-            <button id="ordersell" type="button" class="btn btn-danger btn-sm">Sell</button>
-          </div>
+
+          <form class="form-horizontal" role="form">
+            <div class="form-group">
+              <label for="trade_price" class="col-xs-4 control-label">Price:</label>
+              <div class="col-xs-8"><input id="trade_price" class="form-control" type="number" min="0" step="0.0001" placeholder="Market Order"></div>
+            </div>
+            <div class="form-group">
+              <label for="trade_amount" class="col-xs-4 control-label">Amount:</label>
+              <div class="col-xs-8"><input id="trade_amount" class="form-control" type="number" min="0" step="0.0001" placeholder="# of bitcoins" required></div>
+            </div>
+            <div class="form-group">
+              <div class="col-xs-6"><button id="orderbuy" type="button" class="form-control btn btn-success btn-sm">Buy</button></div>
+              <div class="col-xs-6"><button id="ordersell" type="button" class="form-control btn btn-danger btn-sm">Sell</button></div>
+            </div>
+          </form>
 
           <div id="openordersPanel" class="form-group">
             <button id="openorders" type="button" class="btn btn-default btn-sm">Refresh open orders</button>
-            <button id="cancelorder" type="button" class="btn btn-default btn-sm">Cancel selected order</button>
+            <button id="cancelorder" type="button" class="btn btn-default btn-sm">Cancel selected orders</button>
             <select id="user_openorders" class="form-control" multiple>
               <option value="">No open orders</option>
             </select>
@@ -132,10 +135,10 @@
         </div>
 
         <button id="showusertransactions" type="button" class="btn btn-default btn-sm">Show transaction history</button>
-        <select id="usertransactionlist" multiple>
+        <select id="usertransactionlist" class="form-control" multiple>
           <option>No user transactions</option>
         </select>
-        <button id="logout" type="logout" class="btn btn-default btn-sm">Logout</button>
+        
       </div>
     </div>
 
@@ -144,7 +147,7 @@
       $('#panel_login').show();
       $('#panel_trade').hide();
       $('#usertransactionlist').hide();
-      $('#order_panel').hide();
+      $('#order_panel').show();
       $('#transfers_panel').hide();
 
       getTicker();
@@ -157,7 +160,7 @@
         }, refreshsecs * 1000);
 
       $('#submit_login').click( function(){doLogin($('#clientid').val(), $('#apikey').val(), $('#apisecret').val());} );
-      $('#logout').click( doLogout );
+      $('#button_logout').click( doLogout );
       //$('#orderbook').click( function(){getOrderBook(1);} );
       //$('#transactions').click( function(){getTransactions('hour');} );
       //$('#eurusd').click( function(){getEurUsdRate();} );
