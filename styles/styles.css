@@ -11,7 +11,14 @@ table caption {
 	margin-top: -4px;
 }
 
+.tab-content {
+	margin: 1em;
+}
+
+
+
 /*
+ul.nav-tabs li a[href=#transactions]
 body {
   background: #F7F6F2;8ec919
   color: #333;

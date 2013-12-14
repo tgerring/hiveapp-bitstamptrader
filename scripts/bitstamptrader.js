@@ -52,48 +52,35 @@ function toggleobj(obj) {
 }
 
 function refreshUserTransactions() {
-  if ($('#usertransactionlist').is(':visible')) {
-    $('#usertransactionlist').hide();
-    $('#showusertransactions').html('Show transaction history');
-  } else {
-    $('#showusertransactions').prop('disabled', true);
-    params = bitstamp.submitRequest(bitstamp.methods.usertransactions,
-      function(response){
-        if ('data' in response) {
-          $('#showusertransactions').prop('disabled', false);
-          $('#usertransactionlist').show();
+  bitstamp.submitRequest(bitstamp.methods.usertransactions, function(response){
+      if ('data' in response) {
+        // Clear transactions list
+        $('#usertransactionlist option').each(function(index, option) {$(option).remove();});
 
-          $('#usertransactionlist option').each(function(index, option) {
-              $(option).remove();
-          });
-
-          typedesc = 'Other';
-          $.each(response.data, function(index, value) {
-            if (value.type == 0) {
-              typedesc = 'Deposit';
-            } else if (value.type == 1) {
-              typedesc = 'Withdrawal';
-            } else if (value.type == 2) {
-              typedesc = 'Market trade';
-            }
-            msg = typedesc + ' at ' + value.datetime;
-            $('#usertransactionlist').append('<option>' + msg + '</option>');
-          });
-
-          if ($('#usertransactionlist option').size() < 1) {
-            $('#usertransactionlist').append('<option value>No user transactions</option>');
+        // Build transactions
+        typedesc = 'Other';
+        $.each(response.data, function(index, value) {
+          if (value.type == 0) {
+            typedesc = 'Deposit';
+          } else if (value.type == 1) {
+            typedesc = 'Withdrawal';
+          } else if (value.type == 2) {
+            typedesc = 'Market trade';
           }
-          $('#showusertransactions').html('Hide transaction history');
-        } else {
-          alert(response.error || 'Unknown error');
-          $('#usertransactionlist').hide();
-          $('#showusertransactions').prop('disabled', false);
-          $('#showusertransactions').html('Show transaction history');
+          msg = typedesc + ' at ' + value.datetime;
+          $('#usertransactionlist').append('<option>' + msg + '</option>');
+        });
+
+        // Exception for empty transaction list
+        if ($('#usertransactionlist option').size() < 1) {
+          $('#usertransactionlist').append('<option value>No user transactions</option>');
         }
-      },
-      {}
-    );
-  }
+      } else {
+        alert(response.error || 'Unknown error');
+      }
+    },
+    {} // Could be used for pagination in the future
+  );
 }
 
 function doLogout() {
@@ -107,10 +94,10 @@ function refreshOpenOrders() {
   params = bitstamp.submitRequest(bitstamp.methods.openorders, function(response){
     if ('data' in response) {
 
-      $('#user_openorders option').each(function(index, option) {
-          $(option).remove();
-      });
+      // Clear transactions list
+      $('#user_openorders option').each(function(index, option) {$(option).remove();});
 
+      // Build transactions
       typedesc = 'Other';
       $.each(response.data, function(index, value) {
         if (value.type == 0) {
@@ -121,12 +108,13 @@ function refreshOpenOrders() {
         msg = typedesc + value.amount.toString() + ' at ' + value.price.toString();
         $('#user_openorders').append('<option>' + msg + '</option>');
       });
+      
+      // Exception for empty transaction list
+      if ($('#user_openorders option').size() < 1) {
+        $('#user_openorders').append('<option value="">No open orders</option>');
+      }
     } else {
       alert(response.error || 'Unknown error');
-    }
-
-    if ($('#user_openorders option').size() < 1) {
-      $('#user_openorders').append('<option value="">No open orders</option>');
     }
   });
 }
@@ -168,7 +156,8 @@ function doLogin(clientid, apikey, apisecret) {
 
       $('#panel_login').hide();
       $('#panel_trade').show();
-      //refreshOpenOrders();
+      refreshOpenOrders();
+      refreshUserTransactions();
     } else {
       alert(response.error || 'Unknown error');
       $('#panel_login').show();
