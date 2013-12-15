@@ -76,7 +76,9 @@
           <tbody>
             <tr>
               <th>Client ID:</th>
-              <th><span id="client_id"></span> <button id="button_logout" type="button" class="btn btn-default btn-xs"><i class="fa fa-sign-out"></i> Logout</a></th>
+              <th><span id="client_id"></span>
+              <button id="button_refreshall" type="button" class="btn btn-default btn-xs"><i class="fa fa-refresh fa-fw"></i></button>
+              <button id="button_logout" type="button" class="btn btn-default btn-xs"><i class="fa fa-sign-out"></i> Logout</a></th>
             </tr>
             <tr>
               <th>Fee:</th>
@@ -84,11 +86,11 @@
             </tr>
             <tr>
               <th>BTC Balance:</th>
-              <td><span id="balance_btc"></span> (<span id="available_btc"></span> available/<span id="reserved_btc"></span> reserved)</td>
+              <td><i class="fa fa-btc fa-fw"></i><span id="balance_btc"></span> (<span id="available_btc"></span> available/<span id="reserved_btc"></span> reserved)</td>
             </tr>
             <tr>
               <th>USD Balance:</th>
-              <td><span id="balance_usd"></span> (<span id="available_usd"></span> available/<span id="reserved_usd"></span> reserved)</td>
+              <td><i class="fa fa-usd fa-fw"></i><span id="balance_usd"></span> (<span id="available_usd"></span> available/<span id="reserved_usd"></span> reserved)</td>
             </tr>
           </tbody>
         </table>
@@ -179,6 +181,7 @@
       /// Initialization
 
       // Event bindings
+      $('#button_refreshall').click( function(){location.reload(false);} );
       $('#submit_login').click( function(){doLogin($('#clientid').val(), $('#apikey').val(), $('#apisecret').val());} );
       $('#button_logout').click( doLogout );
       $('#orderbuy').click( function(){orderBuy($('#trade_amount').val(), $('#trade_price').val());} );

@@ -7,7 +7,7 @@ table caption {
 	font-size: 70%;
 }
 
-#button_logout {
+#button_logout, #button_refreshall {
 	margin-top: -4px;
 }
 

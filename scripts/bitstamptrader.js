@@ -8,9 +8,9 @@ function format_number( number, format ){
 
   value = numeral(number);
   result = value.format(format)
-  if (value.value() == 0) {
-    result = '0';
-  }
+
+  // Zero is zero. Might be useful to detect currency/percentage and include them still
+  numeral.zeroFormat('0');
 
   /*if (systemInfo.decimalSeparator === ',') {
     result = result.replace('/[,]/g', ' ');
@@ -246,9 +246,9 @@ function doLogin(clientid, apikey, apisecret) {
       $('#balance_btc').text(format_number(response.data.btc_balance, '0,0.0000'));
       $('#available_btc').text(format_number(response.data.btc_available, '0,0.0000'));
       $('#reserved_btc').text(format_number(response.data.btc_reserved, '0,0.0000'));
-      $('#balance_usd').text(format_number(response.data.usd_balance, '$0,0.00'));
-      $('#available_usd').text(format_number(response.data.usd_available, '$0,0.00'));
-      $('#reserved_usd').text(format_number(response.data.usd_reserved, '$0,0.00'));
+      $('#balance_usd').text(format_number(response.data.usd_balance, '0,0.00'));
+      $('#available_usd').text(format_number(response.data.usd_available, '0,0.00'));
+      $('#reserved_usd').text(format_number(response.data.usd_reserved, '0,0.00'));
 
 
       $('#panel_login').hide();
