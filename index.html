@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- These are all styles. Customize to your liking -->
-    <link href="styles/normalize.css" rel="stylesheet" type="text/css" />
     <link href="styles/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="styles/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
     <link href="styles/font-awesome.min.css" rel="stylesheet" type="text/css" />
@@ -77,9 +76,8 @@
           Fee: <span class="data_user_fee"></span>
           <i class="fa fa-btc fa-fw"></i><span class="data_available_btc"></span> /<i class="fa fa-usd fa-fw"></i><span class="data_available_usd"></span>
           <span class="pull-right">
-            <button id="button_collapse" type="button" class="btn btn-default btn-xs" data-toggle="collapse" data-target="#panel_account_details"><i class="fa fa-caret-down fa-fw"></i><span class="sr-only">Toggle account details</span></button>
             <button id="button_refreshall" type="button" class="btn btn-default btn-xs"><i class="fa fa-refresh fa-fw"></i><span class="sr-only">Reload app</span></button>
-            <button id="button_logout" type="button" class="btn btn-danger btn-xs"><i class="fa fa-sign-out fa-fw"></i><span class="sr-only">Logout</span></button>
+            <button id="button_collapse" type="button" class="btn btn-default btn-xs" data-toggle="collapse" data-target="#panel_account_details"><i class="fa fa-caret-down fa-fw"></i><span class="sr-only">Toggle account details</span></button>
           </span>
         </p>
 
@@ -89,6 +87,7 @@
               <th>Account:</th>
               <td>
                 <span class="data_client_id"></span>
+                <button id="button_logout" type="button" class="btn btn-danger btn-xs"><i class="fa fa-sign-out fa-fw"></i><span class="sr-only">Logout</span></button>
               </td>
             </tr>
             <tr>

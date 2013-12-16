@@ -29,14 +29,12 @@ function listUnconfirmedBitcoinTransactions() {
     });
 
     if ('data' in response) {
-        // Build transactions
+      if (response.data.length > 0) {
         $.each(response.data, function(index, value) {
           msg = value.amount + ' BTC has ' + value.confirmations + ' confirmations';
           $('#pending_transfers').append('<option class="pending_deposit">' + msg + '</option>');
         });
-
-        // Exception for empty transaction list
-        if ($('#pending_transfers option').size() < 1) {
+      } else {
           $('#pending_transfers').append('<option class="pending_deposit">No pending deposits</option>');
         }
     } else {
@@ -55,8 +53,9 @@ function listPendingWithdrawalRequests() {
         $(option).remove();
       }
     });
+    
     if ('data' in response) {
-        // Build transactions
+      if (response.data.length > 0) {
         $.each(response.data, function(index, value) {
           typedesc = 'Unknown';
           if (value.type == 0) {
@@ -89,9 +88,7 @@ function listPendingWithdrawalRequests() {
           msg = value.amount.toString() + ' via ' + typedesc + ' at ' + value.datetime + ' is ' + statusdesc;
           $('#pending_transfers').append('<option class="pending_withdrawal">' + msg + '</option>');
         });
-
-        // Exception for empty transaction list
-        if ($('#pending_transfers option').size() < 1) {
+        } else {
           $('#pending_transfers').append('<option class="pending_withdrawal">No pending withdrawals</option>');
         }
     } else {
@@ -262,10 +259,10 @@ function doLogin(clientid, apikey, apisecret) {
 
       $('#panel_login').hide();
       $('#panel_trade').show();
-      refreshOpenOrders();
-      refreshUserTransactions();
-      listPendingWithdrawalRequests();
-      listUnconfirmedBitcoinTransactions();
+      window.setTimeout(refreshOpenOrders, 600);
+      window.setTimeout(refreshUserTransactions, 1000);
+      window.setTimeout(listPendingWithdrawalRequests, 200);
+      window.setTimeout(listUnconfirmedBitcoinTransactions, 400);
     } else {
       alert(response.error || 'Unknown error');
       $('#panel_login').show();
