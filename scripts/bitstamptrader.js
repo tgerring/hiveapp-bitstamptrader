@@ -10,7 +10,7 @@ function format_number( number, format ){
   result = value.format(format)
 
   // Zero is zero. Might be useful to detect currency/percentage and include them still
-  numeral.zeroFormat('0');
+  //numeral.zeroFormat('0');
 
   /*if (systemInfo.decimalSeparator === ',') {
     result = result.replace('/[,]/g', ' ');
@@ -22,22 +22,27 @@ function format_number( number, format ){
 
 function listUnconfirmedBitcoinTransactions() {
   params = bitstamp.submitRequest(bitstamp.methods.unconfirmedbtc, function(response){
-    $('#unconfirmed_bitcoin_deposits option').each(function(index, option) {$(option).remove();});
+    $('#pending_transfers option').each(function(index, option) {
+      if ($(option).hasClass('pending_deposit')) {
+        $(option).remove();
+      }
+    });
+
     if ('data' in response) {
         // Build transactions
         $.each(response.data, function(index, value) {
           msg = value.amount + ' BTC has ' + value.confirmations + ' confirmations';
-          $('#unconfirmed_bitcoin_deposits').append('<option>' + msg + '</option>');
+          $('#pending_transfers').append('<option class="pending_deposit">' + msg + '</option>');
         });
 
         // Exception for empty transaction list
-        if ($('#unconfirmed_bitcoin_deposits option').size() < 1) {
-          $('#unconfirmed_bitcoin_deposits').append('<option>No unconfirmed bitcoin deposits</option>');
+        if ($('#pending_transfers option').size() < 1) {
+          $('#pending_transfers').append('<option class="pending_deposit">No pending deposits</option>');
         }
     } else {
       errormsg = response.error || 'Unknown error';
       console.log(errormsg);
-      $('#unconfirmed_bitcoin_deposits').append('<option>Could not fetch transactions: ' + errormsg + '</option>');
+      $('#pending_transfers').append('<option class="pending_deposit">Could not load deposits: ' + errormsg + '</option>');
     }
   });
 }
@@ -45,7 +50,11 @@ function listUnconfirmedBitcoinTransactions() {
 
 function listPendingWithdrawalRequests() {
   params = bitstamp.submitRequest(bitstamp.methods.withdrawalrequests, function(response){
-    $('#pending_withdrawal_requests option').each(function(index, option) {$(option).remove();});
+    $('#pending_transfers option').each(function(index, option) {
+      if ($(option).hasClass('pending_withdrawal')) {
+        $(option).remove();
+      }
+    });
     if ('data' in response) {
         // Build transactions
         $.each(response.data, function(index, value) {
@@ -78,17 +87,17 @@ function listPendingWithdrawalRequests() {
           }
 
           msg = value.amount.toString() + ' via ' + typedesc + ' at ' + value.datetime + ' is ' + statusdesc;
-          $('#pending_withdrawal_requests').append('<option>' + msg + '</option>');
+          $('#pending_transfers').append('<option class="pending_withdrawal">' + msg + '</option>');
         });
 
         // Exception for empty transaction list
-        if ($('#pending_withdrawal_requests option').size() < 1) {
-          $('#pending_withdrawal_requests').append('<option>No pending withdrawal requests</option>');
+        if ($('#pending_transfers option').size() < 1) {
+          $('#pending_transfers').append('<option class="pending_withdrawal">No pending withdrawals</option>');
         }
     } else {
       errormsg = response.error || 'Unknown error';
       console.log(errormsg);
-      $('#pending_withdrawal_requests').append('<option>Could not fetch transactions: ' + errormsg + '</option>');
+      $('#pending_transfers').append('<option class="pending_withdrawal">Could not load withdrawals: ' + errormsg + '</option>');
     }
   });
 }
@@ -169,7 +178,7 @@ function refreshUserTransactions() {
         }
       } else {
         errormsg = response.error || 'Unknown error';
-        $('#usertransactionlist').append('<option>Could not fetch transactions: ' + errormsg + '</option>');
+        $('#usertransactionlist').append('<option>Could not load transactions: ' + errormsg + '</option>');
       }
     },
     {} // Could be used for pagination in the future
@@ -209,7 +218,7 @@ function refreshOpenOrders() {
       }
     } else {
       errormsg = response.error || 'Unknown error';
-      $('#user_openorders').append('<option value="">Could not fetch orders: ' + errormsg + '</option>');
+      $('#user_openorders').append('<option value="">Could not load orders: ' + errormsg + '</option>');
       $('#btn_cancelorder').prop('disabled', true);
     }
   });
@@ -239,16 +248,16 @@ function doLogin(clientid, apikey, apisecret) {
     if ('data' in response) {
       storeLoginDetails(bitstamp);
       
-      $('#client_id').text(bitstamp.auth.client_id.toString());
-      $('#user_fee').text(format_number(response.data.fee / 100, '0.00%'));
+      $('.data_client_id').text(bitstamp.auth.client_id.toString());
+      $('.data_user_fee').text(format_number(response.data.fee / 100, '0.00%'));
       //$('#user_fee').text(response.data.fee.toString());
 
-      $('#balance_btc').text(format_number(response.data.btc_balance, '0,0.0000'));
-      $('#available_btc').text(format_number(response.data.btc_available, '0,0.0000'));
-      $('#reserved_btc').text(format_number(response.data.btc_reserved, '0,0.0000'));
-      $('#balance_usd').text(format_number(response.data.usd_balance, '0,0.00'));
-      $('#available_usd').text(format_number(response.data.usd_available, '0,0.00'));
-      $('#reserved_usd').text(format_number(response.data.usd_reserved, '0,0.00'));
+      $('.data_balance_btc').text(format_number(response.data.btc_balance, '0,0.0000'));
+      $('.data_available_btc').text(format_number(response.data.btc_available, '0,0.0000'));
+      $('.data_reserved_btc').text(format_number(response.data.btc_reserved, '0,0.0000'));
+      $('.data_balance_usd').text(format_number(response.data.usd_balance, '0,0.00'));
+      $('.data_available_usd').text(format_number(response.data.usd_available, '0,0.00'));
+      $('.data_reserved_usd').text(format_number(response.data.usd_reserved, '0,0.00'));
 
 
       $('#panel_login').hide();
@@ -297,12 +306,12 @@ function checkLogin() {
 function getTicker(response) {
   params = bitstamp.submitRequest(bitstamp.methods.ticker, function(response){
     if ('data' in response) {
-      $('#ticker_last').text(format_number(response.data.last, '$0,0.00'));
-      $('#ticker_high').text(format_number(response.data.high, '$0,0.00'));
-      $('#ticker_low').text(format_number(response.data.low, '$0,0.00'));
-      $('#ticker_volume').text(format_number(response.data.volume, '0,0.000000'));
-      $('#ticker_bid').text(format_number(response.data.bid, '$0,0.00'));
-      $('#ticker_ask').text(format_number(response.data.ask, '$0,0.00'));
+      $('.data_ticker_last').text(format_number(response.data.last, '$0,0.00'));
+      $('.data_ticker_high').text(format_number(response.data.high, '$0,0.00'));
+      $('.data_ticker_low').text(format_number(response.data.low, '$0,0.00'));
+      $('.data_ticker_volume').text(format_number(response.data.volume, '0,0.000000'));
+      $('.data_ticker_bid').text(format_number(response.data.bid, '$0,0.00'));
+      $('.data_ticker_ask').text(format_number(response.data.ask, '$0,0.00'));
     } else {
       alert(response.error || 'Unknown error');
     }

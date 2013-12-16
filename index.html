@@ -25,7 +25,7 @@
 
       <div id="panel_public">
         <table class="table table-condensed">
-          <caption>(Refreshing every <span id="refreshsecs">?</span> seconds)</caption>
+          <!--<caption class="small">(Refreshing every <span id="refreshsecs">?</span> seconds)</caption>-->
           <tbody>
             <tr>
               <th>Last</th>
@@ -36,12 +36,12 @@
               <th>Volume</th>
             </tr>
             <tr>
-              <td><span id="ticker_last"></span></td>
-              <!--<td><span id="ticker_bid"></span></td>
-              <td><span id="ticker_ask"></span></td>-->
-              <td><span id="ticker_high"></span> </td>
-              <td><span id="ticker_low"></span></td>
-              <td><span id="ticker_volume"></span></td>
+              <td><span class="data_ticker_last"></span></td>
+              <!--<td><span class="ticker_bid"></span></td>
+              <td><span class="ticker_ask"></span></td>-->
+              <td><span class="data_ticker_high"></span> </td>
+              <td><span class="data_ticker_low"></span></td>
+              <td><span class="data_ticker_volume"></span></td>
             </tr>
           </tbody>
         </table>
@@ -72,25 +72,32 @@
       </div> <!-- /panel_login -->
 
       <div id="panel_trade">
-        <table class="table table-condensed">
+
+        <p>
+          Fee: <span class="data_user_fee"></span>
+          <i class="fa fa-btc fa-fw"></i><span class="data_available_btc"></span> /<i class="fa fa-usd fa-fw"></i><span class="data_available_usd"></span>
+          <span class="pull-right">
+            <button id="button_collapse" type="button" class="btn btn-default btn-xs" data-toggle="collapse" data-target="#panel_account_details"><i class="fa fa-caret-down fa-fw"></i><span class="sr-only">Toggle account details</span></button>
+            <button id="button_refreshall" type="button" class="btn btn-default btn-xs"><i class="fa fa-refresh fa-fw"></i><span class="sr-only">Reload app</span></button>
+            <button id="button_logout" type="button" class="btn btn-danger btn-xs"><i class="fa fa-sign-out fa-fw"></i><span class="sr-only">Logout</span></button>
+          </span>
+        </p>
+
+        <table class="table table-condensed collapse" id="panel_account_details">
           <tbody>
             <tr>
-              <th>Client ID:</th>
-              <th><span id="client_id"></span>
-              <button id="button_refreshall" type="button" class="btn btn-default btn-xs"><i class="fa fa-refresh fa-fw"></i></button>
-              <button id="button_logout" type="button" class="btn btn-default btn-xs"><i class="fa fa-sign-out"></i> Logout</a></th>
-            </tr>
-            <tr>
-              <th>Fee:</th>
-              <td><span id="user_fee"></span></td>
+              <th>Account:</th>
+              <td>
+                <span class="data_client_id"></span>
+              </td>
             </tr>
             <tr>
               <th>BTC Balance:</th>
-              <td><i class="fa fa-btc fa-fw"></i><span id="balance_btc"></span> (<span id="available_btc"></span> available/<span id="reserved_btc"></span> reserved)</td>
+              <td><i class="fa fa-btc fa-fw"></i><span class="data_balance_btc"></span> (<span class="data_reserved_btc"></span> reserved)</td>
             </tr>
             <tr>
               <th>USD Balance:</th>
-              <td><i class="fa fa-usd fa-fw"></i><span id="balance_usd"></span> (<span id="available_usd"></span> available/<span id="reserved_usd"></span> reserved)</td>
+              <td><i class="fa fa-usd fa-fw"></i><span class="data_balance_usd"></span> (<span class="data_reserved_usd"></span> reserved)</td>
             </tr>
           </tbody>
         </table>
@@ -120,7 +127,7 @@
             </form>
 
             <select id="user_openorders" class="form-control" multiple size="8">
-              <option value="">No open orders</option>
+              <option value="">Open orders not loaded</option>
             </select>
             <button id="btn_cancelorder" type="button" class="btn btn-default btn-sm form-control"><i class="fa fa-ban"></i> Cancel selected orders</button>
           </div>
@@ -145,19 +152,15 @@
               </div>
             </form>
 
-            <select id="pending_withdrawal_requests" class="form-control" multiple size="4">
-              <option>No pending withdrawal requests</option>
-            </select>
-
-            <select id="unconfirmed_bitcoin_deposits" class="form-control" multiple size="4">
-              <option>No unconfirmed bitcoin deposits</option>
+            <select id="pending_transfers" class="form-control" multiple size="4">
+              <option class="pending_withdrawal pending_deposit">Transfers not loaded</option>
             </select>
 
           </div>
 
           <div class="tab-pane fade" id="transactions">
             <select id="usertransactionlist" class="form-control" multiple size="8">
-              <option>No user transactions</option>
+              <option>Transactions not loaded</option>
             </select>
           </div>
         </div>
@@ -172,7 +175,7 @@
       $('#panel_login').show();
       $('#panel_trade').hide();
       $('#refreshsecs').text(refreshsecs.toString());
-
+      //$('#panel_account_details').collapse({toggle: false});
       checkLogin();
       getTicker();
       window.setInterval(function(){
@@ -181,6 +184,7 @@
       /// Initialization
 
       // Event bindings
+      //$('#button_collapse').click(function(){$('#panel_account_details').collapse('toggle');});
       $('#button_refreshall').click( function(){location.reload(false);} );
       $('#submit_login').click( function(){doLogin($('#clientid').val(), $('#apikey').val(), $('#apisecret').val());} );
       $('#button_logout').click( doLogout );

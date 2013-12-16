@@ -154,7 +154,8 @@ Bitstamp.prototype.submitRequest = function(bitstampmethod, callback, params) {
 
 Bitstamp.prototype.handleError = function(textStatus, errorThrown, callback) {
     var data = {};
-    data.error = 'Error with request: ' + errorThrown;
+    data.error = 'Error with request (see console)'
+    console.log(errorThrown);
     this.parseResponse(data, callback);
 }
 

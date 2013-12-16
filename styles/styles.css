@@ -3,11 +3,7 @@ body {
   color: #333;
 }
 
-table caption {
-	font-size: 70%;
-}
-
-#button_logout, #button_refreshall {
+.btn-xs {
 	margin-top: -4px;
 }
 
@@ -22,4 +18,13 @@ table caption {
 .row {
 	margin-top: 1em;
 	margin-bottom: 1em;
+}
+
+select {
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+
+.nav-tabs {
+	margin-top: 2em;
 }
