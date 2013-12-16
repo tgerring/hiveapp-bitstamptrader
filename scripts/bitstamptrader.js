@@ -319,6 +319,8 @@ function checkLogin() {
 function getTicker(response) {
   params = bitstamp.submitRequest(bitstamp.methods.ticker, function(response){
     if ('data' in response) {
+      $('#trade_price').val(format_number(response.data.last, '0.00'));
+
       $('.data_ticker_last').text(format_number(response.data.last, '$0,0.00'));
       $('.data_ticker_high').text(format_number(response.data.high, '$0,0.00'));
       $('.data_ticker_low').text(format_number(response.data.low, '$0,0.00'));
