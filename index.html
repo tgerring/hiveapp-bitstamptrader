@@ -40,7 +40,7 @@
               <td><span class="ticker_ask"></span></td>-->
               <td><span class="data_ticker_high"></span> </td>
               <td><span class="data_ticker_low"></span></td>
-              <td><span class="data_ticker_volume"></span></td>
+              <td><span class="data_ticker_volume" style="white-space:nowrap"></span></td>
             </tr>
           </tbody>
         </table>
@@ -125,7 +125,7 @@
               </div>
             </form>
 
-            <select id="user_openorders" class="form-control" multiple size="8">
+            <select id="user_openorders" class="form-control" multiple size="6">
               <option value="">Open orders not loaded</option>
             </select>
             <button id="btn_cancelorder" type="button" class="btn btn-default btn-sm form-control"><i class="fa fa-ban"></i> Cancel selected orders</button>
@@ -138,7 +138,7 @@
             <form role="form">
               <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-btc"></i></span>
-                <input id="transferamount" type="number" class="form-control" placeholder="# of bitcoins">
+                <input id="transferamount" type="number" class="form-control" placeholder="# of bitcoins" min="0" step="0.1">
               </div>
               <div class="row">
                 <div class="col-xs-6">
@@ -151,14 +151,14 @@
               </div>
             </form>
 
-            <select id="pending_transfers" class="form-control" multiple size="4">
+            <select id="pending_transfers" class="form-control" multiple size="6">
               <option class="pending_withdrawal pending_deposit">Transfers not loaded</option>
             </select>
 
           </div>
 
           <div class="tab-pane fade" id="transactions">
-            <select id="usertransactionlist" class="form-control" multiple size="8">
+            <select id="usertransactionlist" class="form-control" multiple size="12">
               <option>Transactions not loaded</option>
             </select>
           </div>
@@ -174,16 +174,14 @@
       $('#panel_login').show();
       $('#panel_trade').hide();
       $('#refreshsecs').text(refreshsecs.toString());
-      //$('#panel_account_details').collapse({toggle: false});
-      checkLogin();
       getTicker();
       window.setInterval(function(){
         getTicker();
       }, refreshsecs * 1000);
+      checkLogin();      
       /// Initialization
 
       // Event bindings
-      //$('#button_collapse').click(function(){$('#panel_account_details').collapse('toggle');});
       $('#button_refreshall').click( function(){location.reload(false);} );
       $('#submit_login').click( function(){doLogin($('#clientid').val(), $('#apikey').val(), $('#apisecret').val());} );
       $('#button_logout').click( doLogout );

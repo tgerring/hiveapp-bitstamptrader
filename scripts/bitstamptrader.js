@@ -2,20 +2,36 @@ var bitstamp = new Bitstamp();
 var refreshsecs = 15;
 var systemInfo = {};
 
+numeral.language('hive-eu', {
+    delimiters: {
+        thousands: ' ',
+        decimal: ','
+    },
+    abbreviations: {
+        thousand: 'k',
+        million: 'mm',
+        billion: 'b',
+        trillion: 't'
+    },
+    ordinal : function (number) {
+        return '--';
+    },
+    currency: {
+        symbol: '$'
+    }
+});
 
-function format_number( number, format ){  
-  //systemInfo.decimalSeparator = ',';
+
+function format_number( number, format ){
+  if (systemInfo.decimalSeparator === ',') {
+    numeral.language('hive-eu');
+  }
 
   value = numeral(number);
   result = value.format(format)
 
-  // Zero is zero. Might be useful to detect currency/percentage and include them still
-  //numeral.zeroFormat('0');
-
-  /*if (systemInfo.decimalSeparator === ',') {
-    result = result.replace('/[,]/g', ' ');
-    result = result.replace('/[.]/g', ',');
-  }*/
+  // Zero is zero
+  // numeral.zeroFormat('0');
 
   return result;
 }
@@ -53,7 +69,7 @@ function listPendingWithdrawalRequests() {
         $(option).remove();
       }
     });
-    
+
     if ('data' in response) {
       if (response.data.length > 0) {
         $.each(response.data, function(index, value) {
@@ -136,7 +152,7 @@ function completeTrade(response) {
 function getBitcoinDepositAddress() {
   params = bitstamp.submitRequest(bitstamp.methods.btcdepositaddress, function(response){
     if ('data' in response) {
-      bitcoin.sendMoney(response.data, $('#transferamount').val() * 1e8, function(success, transactionId){
+      bitcoin.sendMoney(response.data, $('#transferamount').val() * 100000000, function(success, transactionId){
         if (success === true) {
           listUnconfirmedBitcoinTransactions(); // this is unlikely to show anything
         }
@@ -249,9 +265,9 @@ function doLogin(clientid, apikey, apisecret) {
       $('.data_user_fee').text(format_number(response.data.fee / 100, '0.00%'));
       //$('#user_fee').text(response.data.fee.toString());
 
-      $('.data_balance_btc').text(format_number(response.data.btc_balance, '0,0.0000'));
-      $('.data_available_btc').text(format_number(response.data.btc_available, '0,0.0000'));
-      $('.data_reserved_btc').text(format_number(response.data.btc_reserved, '0,0.0000'));
+      $('.data_balance_btc').text(format_number(response.data.btc_balance, '0,0.000000'));
+      $('.data_available_btc').text(format_number(response.data.btc_available, '0,0.000000'));
+      $('.data_reserved_btc').text(format_number(response.data.btc_reserved, '0,0.000000'));
       $('.data_balance_usd').text(format_number(response.data.usd_balance, '0,0.00'));
       $('.data_available_usd').text(format_number(response.data.usd_available, '0,0.00'));
       $('.data_reserved_usd').text(format_number(response.data.usd_reserved, '0,0.00'));
