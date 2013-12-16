@@ -1,6 +1,6 @@
 # hiveapp-bitstamptrader
 
-![Bitstamp orders](http://i.imgur.com/9OdrETf.png)
+![Bitstamp orders](http://i.imgur.com/eZgtqJ5.png)
 
 ## Usage
 ```
