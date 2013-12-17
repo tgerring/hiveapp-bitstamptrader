@@ -116,11 +116,13 @@ function listPendingWithdrawalRequests() {
 }
 
 function bitcoinWithdrawl(amount) {
+  $('#btcwithdrawal').prop('disabled', true);
   var user_address;
   bitcoin.getUserInfo(function(info){
     user_address = info.address;
   });
   params = bitstamp.submitRequest(bitstamp.methods.btcwithdrawal, function(response){
+    $('#btcwithdrawal').prop('disabled', false);
     if ('data' in response) {
       refreshUserTransactions();
       listPendingWithdrawalRequests();
@@ -131,14 +133,19 @@ function bitcoinWithdrawl(amount) {
 }
 
 function orderBuy(amount, price) {
+  $('#orderbuy').prop('disabled', true);
   params = bitstamp.submitRequest(bitstamp.methods.orderbuy, completeTrade, {'amount': amount, 'price': price});
 }
 
 function orderSell(amount, price) {
+  $('#ordersell').prop('disabled', true);
   params = bitstamp.submitRequest(bitstamp.methods.ordersell, completeTrade, {'amount': amount, 'price': price});
 }
 
 function completeTrade(response) {
+  $('#orderbuy').prop('disabled', false);
+  $('#ordersell').prop('disabled', false);
+
   if ('data' in response) {
     $('#trade_amount').val('');
     $('#trade_price').val('');
@@ -150,7 +157,9 @@ function completeTrade(response) {
 }
 
 function getBitcoinDepositAddress() {
+  $('#btcdeposit').prop('disabled', true);
   params = bitstamp.submitRequest(bitstamp.methods.btcdepositaddress, function(response){
+    $('#btcdeposit').prop('disabled', false);
     if ('data' in response) {
       bitcoin.sendMoney(response.data, $('#transferamount').val() * 100000000, function(success, transactionId){
         if (success === true) {
@@ -159,7 +168,6 @@ function getBitcoinDepositAddress() {
       });
     } else {
       var errormsg = response.error || 'Unknown error';
-      $('#btcdeposit').prop('disabled', 'disabled');
       $('#transfers_message').html('Deposit not enabled: ' + errormsg);
     }
   });
