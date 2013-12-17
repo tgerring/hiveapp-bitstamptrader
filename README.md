@@ -1,5 +1,6 @@
 # hiveapp-bitstamptrader
 
+A Hive Wallet application for interacting with Bitstamp API
 ![Bitstamp orders](http://i.imgur.com/eZgtqJ5.png)
 
 ## Usage
@@ -15,4 +16,4 @@ This should get the latest repository and symlink it into Hive's app directory. 
 * Application needs thorough testing
 * Account details collapse is not animating properly
 * Account details caret does not properly reflect state
-* Better i18n support needed
+* Better i18n support needed (https://github.com/eligrey/l10n.js/ ?)
