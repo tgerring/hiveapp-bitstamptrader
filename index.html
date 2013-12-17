@@ -67,7 +67,7 @@
           <button id="submit_login" type="button" class="btn btn-default btn-sm form-control"><i class="fa fa-sign-in"></i> Login</button>
         </form>
 
-        <p id="loginmessage" class="display: none;"><i class="fa fa-spinner fa-spin"></i> Credentials found. Now logging in&hellip;</p>
+        <p id="loginmessage"><i class="fa fa-spinner fa-spin"></i> Credentials found. Now logging in&hellip;</p>
       </div> <!-- /panel_login -->
 
       <div id="panel_trade">
@@ -172,6 +172,7 @@
       // Initialization
       bitcoin.getSystemInfo(function(info) {systemInfo = info;}); 
       $('#panel_login').show();
+      $('#loginmessage').hide();
       $('#panel_trade').hide();
       $('#refreshsecs').text(refreshsecs.toString());
       getTicker();

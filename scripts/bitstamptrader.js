@@ -266,6 +266,7 @@ function doLogin(clientid, apikey, apisecret) {
   bitstamp = new Bitstamp(clientid, apikey, apisecret);
 
   params = bitstamp.submitRequest(bitstamp.methods.balance, function(response) {
+    $('#loginmessage').hide();
     if ('data' in response) {
       storeLoginDetails(bitstamp);
       
