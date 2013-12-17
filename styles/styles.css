@@ -28,3 +28,7 @@ select {
 .nav-tabs {
 	margin-top: 2em;
 }
+
+.nowrap {
+	white-space: nowrap;
+}
