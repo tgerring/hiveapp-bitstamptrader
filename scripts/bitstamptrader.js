@@ -127,7 +127,7 @@ function bitcoinWithdrawl(amount) {
       refreshUserTransactions();
       listPendingWithdrawalRequests();
     } else {
-      alert(response.error);
+      alert(response.error || 'Unknown error');
     }
   }, {'amount': amount, 'address': user_address});
 }
@@ -168,7 +168,8 @@ function getBitcoinDepositAddress() {
       });
     } else {
       var errormsg = response.error || 'Unknown error';
-      $('#transfers_message').html('Deposit not enabled: ' + errormsg);
+      //$('#transfers_message').html('Deposit not enabled: ' + errormsg);
+      alert(errormsg);
     }
   });
 }
