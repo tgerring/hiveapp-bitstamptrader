@@ -32,3 +32,16 @@ select {
 .nowrap {
 	white-space: nowrap;
 }
+
+.btn-default {
+	/*background-image: linear-gradient(rgb(255, 255, 255) 0px, rgb(142, 201, 25) 100%);*/
+	background-image: none;
+	background-color: rgb(142, 201, 25);
+	color: white;
+	text-shadow: none;
+}
+
+
+button[type="button"]:disabled {
+	color: #333;
+}

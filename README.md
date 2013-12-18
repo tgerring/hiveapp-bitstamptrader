@@ -1,7 +1,7 @@
 # hiveapp-bitstamptrader
 
 A Hive Wallet application for interacting with Bitstamp API
-![Bitstamp orders](http://i.imgur.com/eZgtqJ5.png)
+![Bitstamp orders](http://i.imgur.com/JSaKdzJ.png)
 
 ## Usage
 ```
