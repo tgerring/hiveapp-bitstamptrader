@@ -1,6 +1,7 @@
 # hiveapp-bitstamptrader
 
 A Hive Wallet application for interacting with Bitstamp API. **WARNING! This application has not yet been thoroughly tested.**
+
 ![Bitstamp orders](http://i.imgur.com/JSaKdzJ.png)
 
 ## Features
