@@ -98,7 +98,7 @@ Bitstamp = function(client_id, api_key, api_secret) {
 Bitstamp.prototype.submitRequest = function(bitstampmethod, callback, params) {
   if (!params) params = {};
 
-  console.log('Submitting request to ' + bitstampmethod.endpoint);
+  console.log('Submitting request to ' + (bitstampmethod.endpoint || '??????'));
 
   if ($.inArray('signature', bitstampmethod.params) > -1 && !('signature' in params) ) {
     console.log('Signature required but not in supplied params');
