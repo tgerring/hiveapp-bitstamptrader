@@ -54,7 +54,7 @@ function listUnconfirmedBitcoinTransactions() {
           $('#pending_transfers').append('<option class="pending_deposit">No pending deposits</option>');
         }
     } else {
-      errormsg = response.error || 'Unknown error';
+      errormsg = (response.error || 'Unknown error');
       console.log(errormsg);
       $('#pending_transfers').append('<option class="pending_deposit">Could not load deposits: ' + errormsg + '</option>');
     }
@@ -108,7 +108,7 @@ function listPendingWithdrawalRequests() {
           $('#pending_transfers').append('<option class="pending_withdrawal">No pending withdrawals</option>');
         }
     } else {
-      errormsg = response.error || 'Unknown error';
+      errormsg = (response.error || 'Unknown error');
       console.log(errormsg);
       $('#pending_transfers').append('<option class="pending_withdrawal">Could not load withdrawals: ' + errormsg + '</option>');
     }
@@ -167,7 +167,7 @@ function getBitcoinDepositAddress() {
         }
       });
     } else {
-      var errormsg = response.error || 'Unknown error';
+      var errormsg = (response.error || 'Unknown error');
       //$('#transfers_message').html('Deposit not enabled: ' + errormsg);
       alert(errormsg);
     }
@@ -239,7 +239,7 @@ function refreshOpenOrders() {
         $('#btn_cancelorder').prop('disabled', true);
       }
     } else {
-      errormsg = response.error || 'Unknown error';
+      errormsg = (response.error || 'Unknown error');
       $('#user_openorders').append('<option value="">Could not load orders: ' + errormsg + '</option>');
       $('#btn_cancelorder').prop('disabled', true);
     }
