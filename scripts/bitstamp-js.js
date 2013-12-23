@@ -105,11 +105,11 @@ Bitstamp.prototype.submitRequest = function(bitstampmethod, callback, params) {
 
     unix_timestamp = Math.round(+new Date());
     message = unix_timestamp.toString() + this.auth.client_id + this.auth.api_key;
-    //console.log(message);
-    signature = HMAC_SHA256_MAC(this.auth.api_secret, message);
-    //console.log(signature);
-    signature = signature.toUpperCase();
-    //console.log(signature);
+
+    var hmac = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA256, this.auth.api_secret);
+    hmac.update(message);
+    var hash = hmac.finalize();
+    signature = hash.toString().toUpperCase();
 
     params.key = this.auth.api_key;
     params.signature = signature;
