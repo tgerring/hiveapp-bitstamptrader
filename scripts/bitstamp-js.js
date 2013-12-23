@@ -161,20 +161,19 @@ Bitstamp.prototype.handleError = function(textStatus, errorThrown, callback) {
 }
 
 Bitstamp.prototype.parseResponse = function(response, callback) {
-  console.log('Response returned');
+  console.log('Response returned:');
   console.log(response);
 
   var returnval = {};
 
-  if (typeof response === 'string') {
-    returnval.data = response;
-  } else if ('error' in response) {
+  if (typeof response === 'object' && 'error' in response) {
+    console.log('Error condition');
     var errorstring = '';
     if (typeof response.error === 'string') {
       errorstring = response.error;
     } else {
       for (var key in response.error) {
-        errorstring += response.error[key] + '\n';
+        errorstring += response.error[key] + "\n";
       }
     }
     returnval.error = errorstring;
@@ -182,5 +181,7 @@ Bitstamp.prototype.parseResponse = function(response, callback) {
     returnval.data = response;
   }
 
+  console.log('Response passed to callback:');
+  console.log(returnval);
   callback(returnval);
 }

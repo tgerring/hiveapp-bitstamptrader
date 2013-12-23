@@ -134,12 +134,12 @@ function bitcoinWithdrawl(amount) {
 
 function orderBuy(amount, price) {
   $('#orderbuy').prop('disabled', true);
-  params = bitstamp.submitRequest(bitstamp.methods.orderbuy, completeTrade, {'amount': amount, 'price': price});
+  params = bitstamp.submitRequest(bitstamp.methods.orderbuy, completeTrade, {'amount': amount, 'price': price });
 }
 
 function orderSell(amount, price) {
   $('#ordersell').prop('disabled', true);
-  params = bitstamp.submitRequest(bitstamp.methods.ordersell, completeTrade, {'amount': amount, 'price': price});
+  params = bitstamp.submitRequest(bitstamp.methods.ordersell, completeTrade, {'amount': amount, 'price': price });
 }
 
 function completeTrade(response) {
@@ -150,7 +150,8 @@ function completeTrade(response) {
     $('#trade_amount').val('');
     $('#trade_price').val('');
     refreshOpenOrders();
-    refreshUserTransactions();
+    refreshBalance();
+    //refreshUserTransactions();
   } else {
     alert(response.error || 'Unknown error');
   }
@@ -247,40 +248,29 @@ function refreshOpenOrders() {
 }
 
 function cancelOrders() {
-  console.log('calling cancelOrders');
   $('#user_openorders option:selected').each(function(index, option){
-      console.log(option.value);
     if (parseInt(option.value) > 0) {
       console.log('Canceling order with id ' + option.value.toString());
+
       params = bitstamp.submitRequest(bitstamp.methods.cancelorder, function(response) {
+        console.log(response);
         if ('data' in response) {
-          // TODO refresh balances
-          // refreshOpenOrders();
-          if (response['data'] == true) {
-            //$("#user_openorders option[value='" +  + "']").remove();
-            alert('Order cancelled');
-          }
-          else
-            alert('Order not cancelled');
+          refreshOpenOrders();
+          refreshBalance();
+          //refreshUserTransactions();
         } else {
           alert(response.error || 'Unknown error');
         }
       }, {id: option.value});
+
     }
   });
 }
 
-function doLogin(clientid, apikey, apisecret) {
-  bitstamp = new Bitstamp(clientid, apikey, apisecret);
-
+function refreshBalance(callback) {
   params = bitstamp.submitRequest(bitstamp.methods.balance, function(response) {
-    $('#loginmessage').hide();
-    if ('data' in response) {
-      storeLoginDetails(bitstamp);
-      
       $('.data_client_id').text(bitstamp.auth.client_id.toString());
       $('.data_user_fee').text(format_number(response.data.fee / 100, '0.00%'));
-      //$('#user_fee').text(response.data.fee.toString());
 
       $('.data_balance_btc').text(format_number(response.data.btc_balance, '0,0.000000'));
       $('.data_available_btc').text(format_number(response.data.btc_available, '0,0.000000'));
@@ -289,7 +279,17 @@ function doLogin(clientid, apikey, apisecret) {
       $('.data_available_usd').text(format_number(response.data.usd_available, '0,0.00'));
       $('.data_reserved_usd').text(format_number(response.data.usd_reserved, '0,0.00'));
 
+      callback(response);
+  });
+}
 
+function doLogin(clientid, apikey, apisecret) {
+  bitstamp = new Bitstamp(clientid, apikey, apisecret);
+
+  refreshBalance(function(response) {
+    $('#loginmessage').hide();
+    if ('data' in response) {
+      storeLoginDetails(bitstamp);
       $('#panel_login').hide();
       $('#panel_trade').show();
       window.setTimeout(refreshOpenOrders, 600);
@@ -336,7 +336,7 @@ function checkLogin() {
 function getTicker(response) {
   params = bitstamp.submitRequest(bitstamp.methods.ticker, function(response){
     if ('data' in response) {
-      $('#trade_price').val(format_number(response.data.last, '0.00'));
+      //$('#trade_price').val(format_number(response.data.last, '0.00'));
 
       $('.data_ticker_last').text(format_number(response.data.last, '$0,0.00'));
       $('.data_ticker_high').text(format_number(response.data.high, '$0,0.00'));
