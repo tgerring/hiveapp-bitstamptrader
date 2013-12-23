@@ -230,7 +230,7 @@ function refreshOpenOrders() {
           typedesc = 'Sell ';
         }
         msg = typedesc + value.amount.toString() + ' at ' + value.price.toString();
-        $('#user_openorders').append('<option>' + msg + '</option>');
+        $('#user_openorders').append('<option value="' + value.id + '">' + msg + '</option>');
       });
 
       // Exception for empty transaction list
@@ -247,18 +247,25 @@ function refreshOpenOrders() {
 }
 
 function cancelOrders() {
-  $('#user_openorders option:selected').each(function(){
-    if (int(this.value)) {
-      console.log('Canceling order with id ' + this.value.toString());
+  console.log('calling cancelOrders');
+  $('#user_openorders option:selected').each(function(index, option){
+      console.log(option.value);
+    if (parseInt(option.value) > 0) {
+      console.log('Canceling order with id ' + option.value.toString());
       params = bitstamp.submitRequest(bitstamp.methods.cancelorder, function(response) {
         if ('data' in response) {
-          // TODO reorder or just fetch new?
-          //$("#user_openorders option[value='" +  + "']").remove();
-          refreshOpenOrders();
+          // TODO refresh balances
+          // refreshOpenOrders();
+          if (response['data'] == true) {
+            //$("#user_openorders option[value='" +  + "']").remove();
+            alert('Order cancelled');
+          }
+          else
+            alert('Order not cancelled');
         } else {
           alert(response.error || 'Unknown error');
         }
-      }, {id: this.value});
+      }, {id: option.value});
     }
   });
 }
