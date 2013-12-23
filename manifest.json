@@ -1,7 +1,7 @@
 {
   "name": "Bitstamp",
   "id": "bitstamptrader",
-  "version": "0.9",
+  "version": "1.0",
   "author": "Taylor Gerring",
   "description": "Hive Bitstamp app",
   "icon": "images/icon.png",
