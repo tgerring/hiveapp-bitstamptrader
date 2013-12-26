@@ -21,8 +21,9 @@
   </head>
   <body>
     <div class="container">
-      <img src="images/bitstamp_logo@2x.png" alt="Bitstamp logo" width="262" height="95">
-
+      <a href="https://www.bitstamp.net" target="_blank">
+        <img src="images/bitstamp_logo@2x.png" alt="Bitstamp logo" width="262" height="95">
+      </a>
       <div id="panel_public">
         <table class="table table-condensed">
           <!--<caption class="small">(Refreshing every <span id="refreshsecs">?</span> seconds)</caption>-->
@@ -71,6 +72,10 @@
         </form>
 
         <p id="loginmessage"><i class="fa fa-spinner fa-spin"></i> Credentials found. Now logging in&hellip;</p>
+        <span class="small">
+          <a target="_blank" href="https://www.bitstamp.net/account/security/api/" title="Bitstamp Account API Access">Get API credentials</a>
+          or <a target="_blank" href="https://www.bitstamp.net/article/api-key-implementation/" title="API keys implemented">read the announcement</a>.
+        </span>
       </div> <!-- /panel_login -->
 
       <div id="panel_trade">
