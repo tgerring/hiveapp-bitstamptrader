@@ -49,3 +49,29 @@ select {
 button[type="button"]:disabled {
 	color: #333;
 }
+
+/* Styles for API access tutorial */
+.panel_tutorial {
+    margin-top: 10px;
+}
+
+.panel_tutorial .prev-step {
+    position: absolute;
+    left: 30px;
+}
+
+.panel_tutorial .next-step {
+    position: absolute;
+    right: 30px;
+}
+
+.panel_tutorial img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 8px;
+}
+
+#panel_step2 { display: none; }
+#panel_step3 { display: none; }
+#panel_step4 { display: none; }

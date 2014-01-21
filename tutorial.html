@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>bitstamp-js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- These are all styles. Customize to your liking -->
+    <link href="styles/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="styles/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- To skin the app, modify or replace these files -->
+    <link href="styles/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
+    <link href="styles/styles.css" rel="stylesheet" type="text/css" />
+
+    <!-- Libraries and helper scripts -->
+    <script src="scripts/jquery-2.0.3.min.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="container">
+      <a href="https://www.bitstamp.net" target="_blank">
+        <img src="images/bitstamp_logo@2x.png" alt="Bitstamp logo" width="262" height="95">
+      </a>
+
+      <div id="panel_step1" class="panel_tutorial">
+        <b>API Access How-To: Step 1 - Login</b>
+
+        <p>
+        Log in to your
+        <a target="_blank" href="https://www.bitstamp.net/"
+            title="Bitstamp Account">Bitstamp account</a>
+        and go to
+        <a target="_blank" href="https://www.bitstamp.net/account/security/api/"
+            title="Bitstamp Account API Access">Account &rarr; Security &rarr; API Access</a>.
+        </p>
+
+        <img src="images/tutorial1.png" alt="Bitstamp API Access">
+
+        <div class="navigation">
+          <button id="btn_step1_next" type="button" class="btn btn-default
+            btn-sm next-step">Next <i class="fa fa-arrow-right"></i></button>
+        </div>
+      </div> <!-- /panel_step1 -->
+
+      <div id="panel_step2" class="panel_tutorial">
+        <b>API Access How-To: Step 2 - Create Key</b>
+
+        <p>
+        Select most of the permissions, except for "Ripple withdrawal" and
+        "Ripple deposit address", then click on "Generate Key".
+        </p>
+
+        <img src="images/tutorial2.png" alt="Permissions">
+
+        <div class="navigation">
+          <button id="btn_step2_prev" type="button" class="btn btn-default
+            btn-sm prev-step"><i class="fa fa-arrow-left"></i> Back</button>
+          <button id="btn_step2_next" type="button" class="btn btn-default
+            btn-sm next-step">Next <i class="fa fa-arrow-right"></i></button>
+        </div>
+      </div> <!-- /panel_step2 -->
+
+      <div id="panel_step3" class="panel_tutorial">
+        <b>API Access How-To: Step 3 - Activate Key</b>
+
+        <p>
+        The new key should appear in the list. Click on "Activate" next to it to
+        receive a confirmation email from Bitstamp. Follow the link in the email
+        to activate the API key.
+        </p>
+
+        <img src="images/tutorial3.png" alt="Activate key">
+
+        <div class="navigation">
+          <button id="btn_step3_prev" type="button" class="btn btn-default
+            btn-sm prev-step"><i class="fa fa-arrow-left"></i> Back</button>
+          <button id="btn_step3_next" type="button" class="btn btn-default
+            btn-sm next-step">Next <i class="fa fa-arrow-right"></i></button>
+        </div>
+      </div> <!-- /panel_step3 -->
+
+      <div id="panel_step4" class="panel_tutorial">
+        <b>API Access How-To: Step 4 - Enter Key Details</b>
+
+        <p>
+        You are ready to use the Hive Bitstamp app. Return to the login screen
+        and provide your Bitstamp Customer ID along with the API key and API
+        secret that you just created. Good luck!
+        </p>
+
+        <div class="navigation">
+          <button id="btn_step4_prev" type="button" class="btn btn-default
+            btn-sm prev-step"><i class="fa fa-arrow-left"></i> Back</button>
+          <a href="index.html" id="btn_step4_next" type="button" class="btn btn-default
+            btn-sm next-step">Home</a>
+        </div>
+      </div> <!-- /panel_step4 -->
+
+    </div>
+
+    <script src="scripts/tutorial.js" type="text/javascript"></script>
+  </body>
+</html>
